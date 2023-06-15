@@ -1,9 +1,6 @@
 package com.example.androidstudio2dgamedevelopment.gameobject;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.util.DisplayMetrics;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,7 @@ public abstract class Hand {
         this.displayMetricsY=y;
     }
 
-    public abstract boolean isPressed(float x, float y);
+    public abstract void checkAnyCardClicking(float x, float y);
 
 
 
@@ -30,14 +27,13 @@ public abstract class Hand {
         for (Card card: cardList)card.update();
     }
 
-    public abstract void  refresh();
+    public abstract void  sort();
 
-    public void discard(Card cardPressed) {
-        cardList.remove(cardPressed);
+    public void discard(Card card) {
+        cardList.remove(card);
     }
     public void add(Card c){
         cardList.add(c);
-        refresh();
     }
 
 

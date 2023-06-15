@@ -3,20 +3,17 @@ package com.example.androidstudio2dgamedevelopment;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.androidstudio2dgamedevelopment.gameobject.Card;
 import com.example.androidstudio2dgamedevelopment.gameobject.Deck;
 import com.example.androidstudio2dgamedevelopment.gameobject.Desk;
-import com.example.androidstudio2dgamedevelopment.gameobject.Hand;
+import com.example.androidstudio2dgamedevelopment.gameobject.DeskManager;
 import com.example.androidstudio2dgamedevelopment.gameobject.PlayerHand;
 import com.example.androidstudio2dgamedevelopment.gamepanel.Performance;
-import com.example.androidstudio2dgamedevelopment.graphics.SpriteSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +30,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Performance performance;
     private final PlayerHand playerHand;
     private final Deck deck;
-    List<Desk> deskList = new ArrayList<>();
+    private final DeskManager deskManager;
+
 
     public Game(Context context) {
         super(context);
@@ -49,14 +47,14 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         // Initialize game panels
         performance = new Performance(context, gameLoop);
-        SpriteSheet spriteSheet = new SpriteSheet(context);
         //Animator animator = new Animator(spriteSheet.getPlayerSpriteArray());
         // Initialize game objects
         deck =new Deck(context);
         playerHand= new PlayerHand(displayMetrics.widthPixels, displayMetrics.heightPixels);
         for(int i=0;i<10;i++)playerHand.add(deck.drawCard());
-        playerHand.refresh();
-        deskList.add(new Desk(context,displayMetrics.widthPixels, displayMetrics.heightPixels));
+        playerHand.sort();
+        deskManager=new DeskManager();
+        deskManager.add(new Desk(context,displayMetrics.widthPixels, displayMetrics.heightPixels));
 
 
         // Initialize Tilemap
@@ -70,32 +68,18 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Handle user input touch event actions
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_POINTER_DOWN:
-                if (playerHand.isPressed( event.getX(), event.getY())) {
-                    // Card is pressed in this event -> setIsPressed(true) and store pointer id
-                    CardPointerId = event.getPointerId(event.getActionIndex());
-                    playerHand.getCardPressed().setIsPressed(true);
-                }
+                playerHand.checkAnyCardClicking(event.getX(), event.getY());
+                deskManager.checkCardAnyDeskClicking(event.getX(), event.getY());
                 return true;
             case MotionEvent.ACTION_MOVE:
-                if (playerHand.getIsPressed()) {
-                    // Joystick was pressed previously and is now moved
-                    playerHand.getCardPressed().setPosition(event.getX(), event.getY());
-                   // Log.d("Game.java", "X: "+event.getX()+"y: "+event.getY());
-                }
+                playerHand.dragCardTo(event.getX(), event.getY());
+                deskManager.dragCardTo(event.getX(), event.getY());
                 return true;
 
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-                if (CardPointerId == event.getPointerId(event.getActionIndex())) {
-                    // joystick pointer was let go off -> setIsPressed(false) and resetActuator()
-                    playerHand.getCardPressed().setIsPressed(false);
-                    playerHand.setIsPressed(false);
-                    for(Desk desk:deskList){
-                        desk.isInclude(playerHand);
-                    }
-                    playerHand.refresh();
-                }
+                playerHand.playCardOnDesk(deskManager);
+                deskManager.returnCardToHand(playerHand);
+                playerHand.sort();
                 return true;
         }
 
@@ -129,10 +113,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Draw background
 
         // Draw game objects
-        for (Desk desk :deskList){
-            desk.draw(canvas);
-        }
 
+        deskManager.draw(canvas);
         playerHand.draw(canvas);
 
         // Draw game panels
@@ -148,9 +130,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 
         // Update game state
-        for (Desk desk :deskList){
-            desk.update();
-        }
+
+        deskManager.update();
         playerHand.update();
 
         // Iterate through enemyList and Check for collision between each enemy and the player and

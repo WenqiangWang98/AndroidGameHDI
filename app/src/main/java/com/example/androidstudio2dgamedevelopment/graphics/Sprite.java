@@ -18,7 +18,7 @@ public class Sprite {
         canvas.drawBitmap(
             spriteSheet.getBitmap(),
                 rect,
-                new Rect(x, y, x+getWidth(), y+getHeight()),
+                rect,
                 null
         );
     }

@@ -7,7 +7,7 @@ import android.graphics.Canvas;
  */
 public abstract class GameObject {
     protected float positionX, positionY = 0f;
-    protected boolean pressed;
+    protected boolean clicking;
 
     public GameObject() { }
 
@@ -30,12 +30,12 @@ public abstract class GameObject {
         );
     }
 
-    public void setIsPressed(boolean b) {
-        this.pressed=b;
+    public void setClicking(boolean b) {
+        this.clicking=b;
     }
 
-    public boolean getIsPressed() {
-        return pressed;
+    public boolean getClicking() {
+        return clicking;
     }
 
 
