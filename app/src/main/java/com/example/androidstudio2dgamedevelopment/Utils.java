@@ -1,6 +1,22 @@
 package com.example.androidstudio2dgamedevelopment;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PointF;
+import android.os.Environment;
+import android.util.Log;
+
+import com.opencsv.CSVReader;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 
@@ -58,5 +74,33 @@ public class Utils {
         double difference = A1 + A2 + A3 + A4 - a1 * a2;
         return difference < 1;
     }
+    public static List<Country> initializeCSV(Context context){
 
+        try {
+            InputStream is = context.getResources().openRawResource(R.raw.hdi);
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(is, StandardCharsets.UTF_8));
+            String line = "";
+            List<Country> countries = new ArrayList<>();
+            Resources resources=context.getResources();
+            while ((line = reader.readLine()) != null) {
+                // nextLine[] is an array of values from the line
+                String[] nextLine=line.split(",");
+                countries.add(new Country(
+                        Integer.parseInt(nextLine[0]),
+                        nextLine[1],Float.parseFloat(nextLine[2]),
+                        Float.parseFloat(nextLine[3]),
+                        Float.parseFloat(nextLine[4]),
+                        Integer.parseInt(nextLine[5]),
+                        resources.getDrawable(resources.getIdentifier(nextLine[6],"drawable",context.getPackageName()))
+                        ));
+            }
+            return countries;
+        } catch (Exception e) {
+            Log.d("Utils.java", "initializeCSV: failed");
+
+        }
+
+        return null;
+    }
 }

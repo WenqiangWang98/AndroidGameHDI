@@ -51,7 +51,7 @@ public class PlayerHand extends Hand {
     public void sort() {
         float middle=displayMetricsX/2f;
         float height=displayMetricsY-100;
-        float distance=(50f+cardList.size()*10)/cardList.size()*10f;
+        float distance=(20f+cardList.size()*8)/cardList.size()*8f;
         Log.d("PlayerHand.java", "X: "+displayMetricsX+"y: "+displayMetricsY);
         for (int i=0;i<cardList.size();i++){
             cardList.get(i).setPosition(

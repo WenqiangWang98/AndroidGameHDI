@@ -3,20 +3,27 @@ package com.example.androidstudio2dgamedevelopment;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import com.example.androidstudio2dgamedevelopment.gameobject.Deck;
 import com.example.androidstudio2dgamedevelopment.gameobject.Desk;
 import com.example.androidstudio2dgamedevelopment.gameobject.DeskManager;
 import com.example.androidstudio2dgamedevelopment.gameobject.PlayerHand;
 import com.example.androidstudio2dgamedevelopment.gamepanel.Performance;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderHeaderAware;
 
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Game manages all objects in the game and is responsible for updating all states and render all
@@ -47,9 +54,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         // Initialize game panels
         performance = new Performance(context, gameLoop);
-        //Animator animator = new Animator(spriteSheet.getPlayerSpriteArray());
         // Initialize game objects
-        deck =new Deck(context);
+        deck =new Deck(context,Utils.initializeCSV(context));
         playerHand= new PlayerHand(displayMetrics.widthPixels, displayMetrics.heightPixels);
         for(int i=0;i<10;i++)playerHand.add(deck.drawCard());
         playerHand.sort();
@@ -57,9 +63,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         deskManager.add(new Desk(context,displayMetrics.widthPixels, displayMetrics.heightPixels));
 
 
-        // Initialize Tilemap
 
-        setFocusable(true);
+
     }
 
     @Override

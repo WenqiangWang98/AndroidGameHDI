@@ -62,8 +62,6 @@ public class Rectangle extends GameObject {
     }
 
     public void update(){
-        if(clicking)zoom=1.5f;
-        else zoom=1f;
         this.left=positionX-width*zoom;
         this.top=positionY+height*zoom;
         this.right=positionX+width*zoom;
@@ -94,6 +92,7 @@ public class Rectangle extends GameObject {
             };
             if(Utils.isPointInsideRotatedRectangle(new PointF(x,y),rotatedCorners)){
                 clicking=true;
+                update();
                 return true;
             }else{
                 return false;
