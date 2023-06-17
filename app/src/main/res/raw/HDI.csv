@@ -1,7 +1,7 @@
 1,Switzerland,0.962,84,16.5,66933,ch
 2,Norway,0.961,83.2,18.2,64660,no
 3,Iceland,0.959,82.7,19.2,55782,is
-4,HongKong (China),0.952,85.5,17.3,62607,hk
+4,HongKong_(China),0.952,85.5,17.3,62607,hk
 5,Australia,0.951,84.5,21.1,49238,au
 6,Denmark,0.948,81.4,18.7,60365,dk
 7,Sweden,0.947,83,19.4,54489,se
@@ -15,7 +15,7 @@
 15,Canada,0.936,82.7,16.4,46808,ca
 16,Liechtenstein,0.935,83.3,15.2,146830,li
 17,Luxembourg,0.93,82.6,14.4,84649,lu
-18,United Kingdom,0.929,80.7,17.3,45225,gb
+18,United_Kingdom,0.929,80.7,17.3,45225,gb
 19,Japan,0.925,84.8,15.2,42274,jp
 19,South Korea,0.925,83.7,16.5,44501,kr
 21,United States,0.921,77.2,16.3,64765,us
@@ -23,7 +23,7 @@
 23,Malta,0.918,83.8,16.8,38884,mt
 23,Slovenia,0.918,80.7,17.7,39746,si
 25,Austria,0.916,81.6,16,53619,at
-26,United Arab Emirates,0.911,78.7,15.7,62574,ae
+26,United Arab_Emirates,0.911,78.7,15.7,62574,ae
 27,Spain,0.905,83,17.9,38354,es
 28,France,0.903,82.5,15.8,45937,fr
 29,Cyprus,0.896,81.2,15.6,38188,cy
@@ -48,13 +48,13 @@
 48,Turkiye,0.838,76,18.3,31033,tr
 49,Montenegro,0.832,76.3,15.1,20839,me
 50,Kuwait,0.831,78.7,15.3,52920,kw
-51,Brunei Darussalam,0.829,74.6,14,64490,bn
-52,Russian Federation,0.822,69.4,15.8,27166,ru
+51,Brunei_Darussalam,0.829,74.6,14,64490,bn
+52,Russian_Federation,0.822,69.4,15.8,27166,ru
 53,Romania,0.821,74.2,14.2,30027,ro
 54,Oman,0.816,72.5,14.6,27054,om
 55,Bahamas,0.812,71.6,12.9,30486,bs
 56,Kazakhstan,0.811,69.4,15.8,23943,kz
-57,Trinidad and Tobago,0.81,73,14.5,23392,tt
+57,Trinidad _and Tobago,0.81,73,14.5,23392,tt
 58,Costa Rica,0.809,77,16.5,19974,cr
 58,Uruguay,0.809,75.4,16.8,21269,uy
 60,Belarus,0.808,72.4,15.2,18849,by
@@ -68,16 +68,16 @@
 68,Bulgaria,0.795,71.8,13.9,23079,bg
 68,Grenada,0.795,74.9,18.7,13484,gd
 70,Barbados,0.79,77.6,15.7,12306,bb
-71,Antigua and Barbuda,0.788,78.5,14.2,16792,ag
+71,Antigua_and Barbuda,0.788,78.5,14.2,16792,ag
 72,Seychelles,0.785,71.3,13.9,25831,sc
 73,Sri Lanka,0.782,76.4,14.1,12578,lk
-74,Bosnia and Herzegovina,0.78,75.3,13.8,15242,ba
-75,Saint Kitts and Nevis,0.777,71.7,15.4,23358,kn
+74,Bosnia and_Herzegovina,0.78,75.3,13.8,15242,ba
+75,Saint Kitts _and Nevis,0.777,71.7,15.4,23358,kn
 76,Iran,0.774,73.9,14.6,13001,ir
 77,Ukraine,0.773,71.6,15,13256,ua
-78,North Macedonia,0.77,73.8,13.6,15918,mk
+78,North_Macedonia,0.77,73.8,13.6,15918,mk
 79,China,0.768,78.2,14.2,17504,cn
-80,Dominican Republic,0.767,72.6,14.5,17990,ds
+80,Dominican_Republic,0.767,72.6,14.5,17990,ds
 80,Moldova,0.767,68.8,14.4,14875,md
 80,Palau,0.767,66,15.8,13819,pw
 83,Cuba,0.764,73.7,14.4,7879,cu
@@ -86,7 +86,7 @@
 86,Mexico,0.758,70.2,14.9,17896,mx
 87,Brazil,0.754,72.8,15.6,14370,br
 88,Colombia,0.752,72.8,14.4,14384,co
-89,Saint Vincent and the Grenadines,0.751,69.6,14.7,11961,vc
+89,Saint Vincent and_the Grenadines,0.751,69.6,14.7,11961,vc
 90,Maldives,0.747,79.9,12.6,15448,mv
 91,Algeria,0.745,76.4,14.6,10800,dz
 91,Azerbaijan,0.745,69.4,13.5,14257,az
@@ -128,33 +128,33 @@
 128,Cabo Verde,0.662,74.1,12.6,6230,cv
 129,Bangladesh,0.661,72.4,12.4,5472,bd
 130,Tuvalu,0.641,64.5,9.4,6351,tv
-131,Marshall Islands,0.639,65.3,10.2,4620,mh
+131,Marshall_Islands,0.639,65.3,10.2,4620,mh
 132,India,0.633,67.2,11.9,6590,in
 133,Ghana,0.632,63.8,12,5745,gh
-134,Federated States of Micronesia,0.628,70.7,11.5,3696,fm
+134,Federated States_of Micronesia,0.628,70.7,11.5,3696,fm
 135,Guatemala,0.627,69.2,10.6,8723,gp
 136,Kiribati,0.624,67.4,11.8,4063,ki
 137,Honduras,0.621,70.1,10.1,5298,hn
-138,Sao Tome and Principe,0.618,67.6,13.4,4021,st
+138,Sao Tome_and Principe,0.618,67.6,13.4,4021,st
 139,Namibia,0.615,59.3,11.9,8634,na
 140,Laos,0.607,68.1,10.1,7700,la
 140,Timor-Leste,0.607,67.7,12.6,4461,tl
 140,Vanuatu,0.607,70.4,11.5,3085,vu
 143,Nepal,0.602,68.4,12.9,3877,np
 144,Eswatini,0.597,57.1,13.7,7679,sz
-145,Equatorial Guinea,0.596,60.6,9.7,12074,gq
+145,Equatorial_Guinea,0.596,60.6,9.7,12074,gq
 146,Cambodia,0.593,69.6,11.5,4079,kh
 146,Zimbabwe,0.593,59.3,12.1,3810,zw
 148,Angola,0.586,61.6,12.2,5466,ao
 149,Myanmar,0.585,65.7,10.9,3851,mm
-150,Syrian Arab Republic,0.577,72.1,9.2,4192,sy
+150,Syrian Arab_Republic,0.577,72.1,9.2,4192,sy
 151,Cameroon,0.576,60.3,13.1,3621,cm
 152,Kenya,0.575,61.4,10.7,4474,ke
-153,Republic of the Congo,0.571,63.5,12.3,2889,cg
+153,Republic of_the Congo,0.571,63.5,12.3,2889,cg
 154,Zambia,0.565,61.2,10.9,3218,zm
-155,Solomon Islands,0.564,70.3,10.3,2482,sb
+155,Solomon_Islands,0.564,70.3,10.3,2482,sb
 156,Comoros,0.558,63.4,11.9,3142,km
-156,Papua New Guinea,0.558,65.4,10.4,4009,pg
+156,Papua_New Guinea,0.558,65.4,10.4,4009,pg
 158,Mauritania,0.556,64.4,9.4,5075,mr
 159,Cote d'Ivoire,0.55,58.6,10.7,5217,ci
 160,Tanzania,0.549,66.2,9.2,2664,tz
@@ -176,7 +176,7 @@
 176,Eritrea,0.492,66.5,8.1,1729,er
 177,Guinea-Bissau,0.483,59.7,10.6,1908,gw
 178,Liberia,0.481,60.7,10.4,1289,lr
-179,Democratic Republic of the Congo,0.479,59.2,9.8,1076,cd
+179,Democratic_Republic of Congo,0.479,59.2,9.8,1076,cd
 180,Afghanistan,0.478,62,10.3,1824,af
 181,Sierra Leone,0.477,60.1,9.6,1622,sl
 182,Guinea,0.465,58.9,9.8,2481,gn
@@ -185,7 +185,7 @@
 185,Mozambique,0.446,59.3,10.2,1198,mz
 186,Mali,0.428,58.9,7.4,2133,ml
 187,Burundi,0.426,61.7,10.7,732,bi
-188,Central African Republic,0.404,53.9,8,966,cf
+188,Central African_Republic,0.404,53.9,8,966,cf
 189,Niger,0.4,61.6,7,1240,ne
 190,Chad,0.394,52.5,8,1364,td
 191,South Sudan,0.385,55,5.5,768,ss

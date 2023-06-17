@@ -23,10 +23,10 @@ public class Card extends Rectangle{
     private final float HEIGHT_FLAG_TOP=0.9f;
     private final float HEIGHT_FLAG_BOTTOM=-0.3f;
     private final int TEXT_SIZE_NAME=30;
-    private final int TEXT_SIZE_NAME_2=25;
+    private final int TEXT_SIZE_NAME_2=20;
     private final float HEIGHT_NAME=-0.05f;
     private final float HEIGHT_NAME_1=-0.15f;
-    private final float HEIGHT_NAME_2=0.05f;
+    private final float HEIGHT_NAME_2=0.0f;
     private final int TEXT_SIZE_INDEX_VALUE=20;
     private final float HEIGHT_INDEX_VALUE=0.25f;
     private final float WIDTH_INDEX_VALUE=0.8f;
@@ -85,16 +85,13 @@ public class Card extends Rectangle{
         if(clicking) namePaint.setTextSize(TEXT_SIZE_NAME*zoom);
         else namePaint.setTextSize(TEXT_SIZE_NAME);
         namePaint.getTextBounds(country.getName(),0,country.getName().length(),r);
-        if(r.width()<WIDTH_FLAG*2*width*zoom){
+        if(!country.getName().contains("_")){
             canvas.drawText(country.getName(), positionX, positionY+HEIGHT_NAME*height*zoom, namePaint);
         }else{
             namePaint.setTextSize(TEXT_SIZE_NAME_2*zoom);
-            String[] v=country.getName().split(" ");
-            String name1,name2;
-            name1=TextUtils.join(" ", Arrays.asList(v).subList(0,v.length/2));
-            name2=TextUtils.join(" ", Arrays.asList(v).subList(v.length/2,v.length));
-            canvas.drawText(name1, positionX, positionY+HEIGHT_NAME_1*height*zoom, namePaint);
-            canvas.drawText(name2, positionX, positionY+HEIGHT_NAME_2*height*zoom, namePaint);
+            String[] v=country.getName().split("_");
+            canvas.drawText(v[0], positionX, positionY+HEIGHT_NAME_1*height*zoom, namePaint);
+            canvas.drawText(v[1], positionX, positionY+HEIGHT_NAME_2*height*zoom, namePaint);
 
         }
         //Draw Index value

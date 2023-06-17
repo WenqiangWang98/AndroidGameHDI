@@ -16,6 +16,7 @@ import com.example.androidstudio2dgamedevelopment.gameobject.Desk;
 import com.example.androidstudio2dgamedevelopment.gameobject.DeskManager;
 import com.example.androidstudio2dgamedevelopment.gameobject.PlayerHand;
 import com.example.androidstudio2dgamedevelopment.gamepanel.Performance;
+import com.example.androidstudio2dgamedevelopment.gamepanel.ScoreBoard;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderHeaderAware;
 
@@ -38,6 +39,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final PlayerHand playerHand;
     private final Deck deck;
     private final DeskManager deskManager;
+    private final ScoreBoard scoreBoard;
+
 
 
     public Game(Context context) {
@@ -54,6 +57,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         // Initialize game panels
         performance = new Performance(context, gameLoop);
+        // Initialize game UI
+        scoreBoard=new ScoreBoard(context,displayMetrics.widthPixels, displayMetrics.heightPixels);
         // Initialize game objects
         deck =new Deck(context,Utils.initializeCSV(context));
         playerHand= new PlayerHand(displayMetrics.widthPixels, displayMetrics.heightPixels);
@@ -126,7 +131,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         performance.draw(canvas);
 
-        // Draw Game over if the player is dead
+        // Draw game UI
+        scoreBoard.draw(canvas,1,2);
 
     }
 
