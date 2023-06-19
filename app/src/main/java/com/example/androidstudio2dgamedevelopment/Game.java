@@ -15,6 +15,8 @@ import com.example.androidstudio2dgamedevelopment.gameobject.Deck;
 import com.example.androidstudio2dgamedevelopment.gameobject.Desk;
 import com.example.androidstudio2dgamedevelopment.gameobject.DeskManager;
 import com.example.androidstudio2dgamedevelopment.gameobject.PlayerHand;
+import com.example.androidstudio2dgamedevelopment.gamepanel.Background;
+import com.example.androidstudio2dgamedevelopment.gamepanel.EndTurnButton;
 import com.example.androidstudio2dgamedevelopment.gamepanel.Performance;
 import com.example.androidstudio2dgamedevelopment.gamepanel.ScoreBoard;
 import com.opencsv.CSVReader;
@@ -40,12 +42,17 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Deck deck;
     private final DeskManager deskManager;
     private final ScoreBoard scoreBoard;
+    private final EndTurnButton endTurnButton;
+    private final Background background;
+
+    private final int windowSizeX,windowSizeY;
 
 
 
     public Game(Context context) {
         super(context);
-
+        setBackground(context.getDrawable(R.drawable.background));
+        setZOrderOnTop(true);
         // Get surface holder and add callback
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
@@ -54,18 +61,21 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Initialize display and center it around the player
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
+        windowSizeX=displayMetrics.widthPixels;
+        windowSizeY=displayMetrics.heightPixels;
         // Initialize game panels
         performance = new Performance(context, gameLoop);
         // Initialize game UI
-        scoreBoard=new ScoreBoard(context,displayMetrics.widthPixels, displayMetrics.heightPixels);
+        scoreBoard=new ScoreBoard(context,windowSizeX, windowSizeY);
+        endTurnButton= new EndTurnButton(context,windowSizeX, windowSizeY);
+        background=new Background(context,windowSizeX,windowSizeY);
         // Initialize game objects
-        deck =new Deck(context,Utils.initializeCSV(context));
-        playerHand= new PlayerHand(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        deck =new Deck(context,Utils.initializeCSV(context),windowSizeX,windowSizeY);
+        playerHand= new PlayerHand(windowSizeX, windowSizeY);
         for(int i=0;i<10;i++)playerHand.add(deck.drawCard());
         playerHand.sort();
         deskManager=new DeskManager();
-        deskManager.add(new Desk(context,displayMetrics.widthPixels, displayMetrics.heightPixels));
+        deskManager.add(new Desk(context,windowSizeX/2f, windowSizeY/2f,windowSizeX,windowSizeY));
 
 
 
@@ -122,17 +132,21 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         // Draw background
 
+        //background.draw(canvas);
+
+
+
+        // Draw game table UI
+
+        scoreBoard.draw(canvas,"1","2");
+        endTurnButton.draw(canvas);
         // Draw game objects
 
         deskManager.draw(canvas);
         playerHand.draw(canvas);
 
         // Draw game panels
-
         performance.draw(canvas);
-
-        // Draw game UI
-        scoreBoard.draw(canvas,1,2);
 
     }
 

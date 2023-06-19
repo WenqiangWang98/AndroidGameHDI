@@ -37,23 +37,20 @@ public class PlayerHand extends Hand {
     }
 
     public void draw(Canvas canvas) {
-        float middle=displayMetricsX/2f;
-        float height=displayMetricsY+500;
-        float theta=(7f+cardList.size())/cardList.size();
         for (int i=0;i<cardList.size();i++){
-            canvas.save();
-            cardList.get(i).setRotation(theta*(i+0.5f)-cardList.size()/2f*theta,middle,height);
             cardList.get(i).draw(canvas);
-            canvas.restore();
         }
     }
 
     public void sort() {
         float middle=displayMetricsX/2f;
-        float height=displayMetricsY-100;
-        float distance=(20f+cardList.size()*8)/cardList.size()*8f;
-        Log.d("PlayerHand.java", "X: "+displayMetricsX+"y: "+displayMetricsY);
+        float height=displayMetricsY*0.95f;
+        float rotationHeight=displayMetricsY*2f;
+        float distance=(displayMetricsY*0.01f+cardList.size()*displayMetricsY*0.008f)/cardList.size()*displayMetricsY*0.008f;
+        float theta=(displayMetricsY*0.01f+cardList.size())/cardList.size();
+        Log.d("PlayerHand.java", "X: "+displayMetricsX+" y: "+displayMetricsY);
         for (int i=0;i<cardList.size();i++){
+            cardList.get(i).setRotation(theta*(i+0.5f)-cardList.size()/2f*theta,middle,rotationHeight);
             cardList.get(i).setPosition(
                     middle+(distance*(i+0.5f)-cardList.size()/2f*distance),height);
             cardList.get(i).setClicking(false);

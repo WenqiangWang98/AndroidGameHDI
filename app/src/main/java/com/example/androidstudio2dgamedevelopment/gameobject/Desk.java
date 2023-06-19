@@ -2,6 +2,8 @@ package com.example.androidstudio2dgamedevelopment.gameobject;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -9,20 +11,33 @@ import com.example.androidstudio2dgamedevelopment.R;
 
 
 public class Desk extends Rectangle{
+    private final float RADIO_CORNER=50;
+
+
     private  Context context;
     private Card playedCard;
-    public Desk(Context context, int widthPixels, int heightPixels) {
-        super(ContextCompat.getColor(context, R.color.white),widthPixels/2f,heightPixels/2f,300,300);
+    public Desk(Context context, float x,float y,float screenWidth, float screenHeight) {
+        super(ContextCompat.getColor(context, R.color.player),x,y,screenHeight*0.25f,screenHeight*0.25f);
         this.context=context;
     }
 
     @Override
     public void draw(Canvas canvas) {
-        super.draw(canvas);
+        Paint paint;
+
+        // Draw Shadow
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setShadowLayer(20, 0, 0, Color.GRAY);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
+        paint =new Paint();
+        paint.setColor(Color.LTGRAY);
+        // Draw background
+        canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
 
         if (playedCard!=null){
             playedCard.draw(canvas);
-            Log.d("Desk.java", "player:"+playedCard);
+            Log.d("Desk.java", "playedCard: "+playedCard);
         }
     }
 

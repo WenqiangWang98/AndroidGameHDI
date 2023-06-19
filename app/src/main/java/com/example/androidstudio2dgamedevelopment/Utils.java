@@ -28,13 +28,10 @@ public class Utils {
      * @param p2y
      * @return
      */
-    public static double getDistanceBetweenPoints(double p1x, double p1y, double p2x, double p2y) {
-        return Math.sqrt(Math.pow(p1x - p2x, 2) + Math.pow(p1y - p2y, 2));
+    public static double getDistanceBetweenPoints(PointF p1, PointF p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
-    public static double getAreaOfTriangle(float Ax, float Ay, float Bx, float By, float Cx, float Cy){
-        return Math.abs( (Bx * Ay - Ax * By) + (Cx * By - Bx * Cy) + (Ax * Cy - Cx * Ay) ) / 2.0;
-    }
-    public static PointF rotatedRectangle(PointF origin, PointF point, double radians)
+    public static PointF rotatedPoint(PointF origin, PointF point, double radians)
     {
         double dx = (point.x-origin.x) * Math.cos(radians) - (point.y-origin.y) * Math.sin(radians);
         double dy = (point.x-origin.x) * Math.sin(radians) + (point.y-origin.y) * Math.cos(radians);

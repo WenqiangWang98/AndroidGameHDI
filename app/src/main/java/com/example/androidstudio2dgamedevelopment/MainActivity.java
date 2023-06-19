@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceView;
+import android.widget.LinearLayout;
 
 /**
  * MainActivity is the entry point to our application.
@@ -18,8 +20,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // Set content view to game, so that objects in the Game class can be rendered to the screen
-        game = new Game(this);
-        setContentView(game);
+
+        setContentView(R.layout.activity_main);
+        LinearLayout surface = (LinearLayout)findViewById(R.id.main);
+        surface.addView(new Game(this));
     }
 
     @Override

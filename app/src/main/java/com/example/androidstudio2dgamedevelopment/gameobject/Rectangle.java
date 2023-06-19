@@ -27,7 +27,7 @@ public class Rectangle extends GameObject {
     protected float rotationY;
     protected float zoom=1f;
 
-    public Rectangle(int color, float positionX, float positionY, float height, float width) {
+    public Rectangle(int color, float positionX, float positionY, float width, float height) {
         super(positionX, positionY);
         this.height =height;
         this.width =width;
@@ -44,15 +44,7 @@ public class Rectangle extends GameObject {
 
 
     public void draw(Canvas canvas) {
-        if(rotated){
-            canvas.save();
-            canvas.rotate(theta,rotationX,rotationY);
-            canvas.drawRect(left, top, right, bottom, paint);
-            canvas.restore();
-        }
-        else{
-            canvas.drawRect(left, top, right, bottom, paint);
-        }
+        canvas.drawRect(left, top, right, bottom, paint);
     }
 
     public void setPosition(float x, float y) {
@@ -75,21 +67,24 @@ public class Rectangle extends GameObject {
     public boolean checkClicking(float x, float y) {
         if(rotated){
             clicking=false;
-            if(Utils.getDistanceBetweenPoints(positionX, positionY,x,y)>Math.sqrt(2)*Math.max(height,width))return false;
+            PointF origin = new PointF(rotationX, rotationY); // center of rotation
+            double angleRadians = Math.toRadians(theta);
+            if(Utils.getDistanceBetweenPoints(Utils.rotatedPoint(origin,new PointF(positionX,positionY),angleRadians),new PointF(x,y))
+                    >Math.sqrt(2)*Math.max(height,width))return false;
             PointF[] rectCorners={
                     new PointF(left,top),
                     new PointF(right,top),
                     new PointF(right,bottom),
                     new PointF(left,bottom),
             };
-            PointF origin = new PointF(rotationX, rotationY); // center of rotation
-            double angleRadians = Math.toRadians(theta);
+
             PointF[] rotatedCorners = {
-                    Utils.rotatedRectangle(origin, rectCorners[0],angleRadians),
-                    Utils.rotatedRectangle(origin, rectCorners[1],angleRadians),
-                    Utils.rotatedRectangle(origin, rectCorners[2],angleRadians),
-                    Utils.rotatedRectangle(origin, rectCorners[3],angleRadians),
+                    Utils.rotatedPoint(origin, rectCorners[0],angleRadians),
+                    Utils.rotatedPoint(origin, rectCorners[1],angleRadians),
+                    Utils.rotatedPoint(origin, rectCorners[2],angleRadians),
+                    Utils.rotatedPoint(origin, rectCorners[3],angleRadians),
             };
+
             if(Utils.isPointInsideRotatedRectangle(new PointF(x,y),rotatedCorners)){
                 clicking=true;
                 update();

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Deck {
     private List<Card> cardList = new ArrayList<>();
-    public Deck(Context context, List<Country> countries){
+    public Deck(Context context, List<Country> countries, float x,float y){
         //for tests
 //        cardList.add(new Card(context,countries.get(3)));
 //        cardList.add(new Card(context,countries.get(25)));
@@ -38,7 +38,7 @@ public class Deck {
 //        cardList.add(new Card(context,countries.get(187)));
 
         for(Country country:countries)
-            cardList.add(new Card(context,country));
+            cardList.add(new Card(context,country,x,y));
         Collections.shuffle(cardList);
     }
 

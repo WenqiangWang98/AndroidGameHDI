@@ -1,6 +1,6 @@
-# AndroidStudio2DGameDevelopment
-This repo aims to build a realtime 2D Game for Android.
+# AndroidStudioHDIGame
+This repo aims to build a 2D Game in Android to propagate the understanding of the concept of HDI in society.
 
-The Game will be a multiplayer battleground game, where players can create and join game servers, and use spells and attacks to kill eachother.
+The Game will be a multiplayer game, where players can compite. The players will play with the cards that represent each country.
 
-Primarily, this game is used for teaching game programming concepts from scrtch, and video tutorials can be found at: https://www.youtube.com/watch?v=GIc2GRCUI8s&list=PL2EfDMM6n_LYJdzaOQ5jZZ3Dj5L4tbAuM
+This game will give advantages to the player with better knowledge about the HDI data of each country and encourage them to learn more about this concept.
