@@ -3,30 +3,22 @@ package com.example.androidstudio2dgamedevelopment;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Environment;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
 import com.example.androidstudio2dgamedevelopment.gameobject.Deck;
 import com.example.androidstudio2dgamedevelopment.gameobject.Desk;
 import com.example.androidstudio2dgamedevelopment.gameobject.DeskManager;
 import com.example.androidstudio2dgamedevelopment.gameobject.PlayerHand;
-import com.example.androidstudio2dgamedevelopment.gamepanel.Background;
 import com.example.androidstudio2dgamedevelopment.gamepanel.EndTurnButton;
 import com.example.androidstudio2dgamedevelopment.gamepanel.Performance;
 import com.example.androidstudio2dgamedevelopment.gamepanel.ScoreBoard;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderHeaderAware;
-
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Game manages all objects in the game and is responsible for updating all states and render all
@@ -43,7 +35,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final DeskManager deskManager;
     private final ScoreBoard scoreBoard;
     private final EndTurnButton endTurnButton;
-    private final Background background;
 
     private final int windowSizeX,windowSizeY;
 
@@ -51,12 +42,13 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public Game(Context context) {
         super(context);
-        setBackground(context.getDrawable(R.drawable.background));
-        setZOrderOnTop(true);
         // Get surface holder and add callback
         SurfaceHolder surfaceHolder = getHolder();
-        surfaceHolder.addCallback(this);
 
+        setZOrderOnTop(true);    // necessary
+        //setZOrderMediaOverlay(true);
+        surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
+        surfaceHolder.addCallback(this);
         gameLoop = new GameLoop(this, surfaceHolder);
         // Initialize display and center it around the player
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -68,7 +60,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Initialize game UI
         scoreBoard=new ScoreBoard(context,windowSizeX, windowSizeY);
         endTurnButton= new EndTurnButton(context,windowSizeX, windowSizeY);
-        background=new Background(context,windowSizeX,windowSizeY);
         // Initialize game objects
         deck =new Deck(context,Utils.initializeCSV(context),windowSizeX,windowSizeY);
         playerHand= new PlayerHand(windowSizeX, windowSizeY);
@@ -131,7 +122,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         // Draw background
-
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
         //background.draw(canvas);
 
 

@@ -37,7 +37,6 @@ public class Desk extends Rectangle{
 
         if (playedCard!=null){
             playedCard.draw(canvas);
-            Log.d("Desk.java", "playedCard: "+playedCard);
         }
     }
 

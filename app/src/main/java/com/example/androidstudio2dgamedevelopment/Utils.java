@@ -20,14 +20,7 @@ import java.util.List;
 
 public class Utils {
 
-    /**
-     * getDistanceBetweenPoints returns the distance between 2d points p1 and p2
-     * @param p1x
-     * @param p1y
-     * @param p2x
-     * @param p2y
-     * @return
-     */
+
     public static double getDistanceBetweenPoints(PointF p1, PointF p2) {
         return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }

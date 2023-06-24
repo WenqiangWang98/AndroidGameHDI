@@ -44,9 +44,9 @@ public class Card extends Rectangle{
 
 
     public Card(Context context, Country country,float screenWidth,float screenHeight) {
-        super( ContextCompat.getColor(context, R.color.player),200,200,screenHeight*0.1236f,screenHeight*0.2f);
-        TEXT_SIZE_BIG=screenHeight*0.035f;
-        TEXT_SIZE_MEDIUM=screenHeight*0.028f;
+        super( ContextCompat.getColor(context, R.color.player),200,200,screenHeight*0.1f,screenHeight*0.1618f);
+        TEXT_SIZE_BIG=screenHeight*0.030f;
+        TEXT_SIZE_MEDIUM=screenHeight*0.023f;
         cornerRadio=screenHeight*0.02f;
         this.context=context;
 
@@ -64,7 +64,9 @@ public class Card extends Rectangle{
     @Override
     public void draw(Canvas canvas) {
         //rotate
+        boolean rotating=false;
         if(rotated&&!clicking){
+            rotating=true;
             canvas.save();
             canvas.rotate(theta,rotationX,rotationY);
         }
@@ -118,8 +120,17 @@ public class Card extends Rectangle{
         canvas.drawText("GNI:", positionX-width*WIDTH_GNI*zoom, positionY+HEIGHT_GNI*height*zoom, textPaint);
 
         //rotate back
-        if(rotated&&!clicking)canvas.restore();
+        if(rotating)canvas.restore();
 
+    }
+
+    @Override
+    public boolean checkClicking(float x, float y) {
+        if(super.checkClicking(x, y)){
+            setPosition(x,y);
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -46,8 +46,8 @@ public class PlayerHand extends Hand {
         float middle=displayMetricsX/2f;
         float height=displayMetricsY*0.95f;
         float rotationHeight=displayMetricsY*2f;
-        float distance=(displayMetricsY*0.01f+cardList.size()*displayMetricsY*0.008f)/cardList.size()*displayMetricsY*0.008f;
-        float theta=(displayMetricsY*0.01f+cardList.size())/cardList.size();
+        float distance=displayMetricsX*0.05f;
+        float theta=displayMetricsY*0.002f;
         Log.d("PlayerHand.java", "X: "+displayMetricsX+" y: "+displayMetricsY);
         for (int i=0;i<cardList.size();i++){
             cardList.get(i).setRotation(theta*(i+0.5f)-cardList.size()/2f*theta,middle,rotationHeight);
