@@ -20,10 +20,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // Set content view to game, so that objects in the Game class can be rendered to the screen
-
+        game=new Game(this);
         setContentView(R.layout.activity_main);
-        LinearLayout surface = (LinearLayout)findViewById(R.id.main);
-        surface.addView(new Game(this));
+        LinearLayout surface = findViewById(R.id.main);
+        surface.addView(game);
     }
 
     @Override
