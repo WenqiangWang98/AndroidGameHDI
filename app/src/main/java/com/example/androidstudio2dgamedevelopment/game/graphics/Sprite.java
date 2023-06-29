@@ -1,6 +1,5 @@
-package com.example.androidstudio2dgamedevelopment.graphics;
+package com.example.androidstudio2dgamedevelopment.game.graphics;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 

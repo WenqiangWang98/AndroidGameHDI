@@ -5,19 +5,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.androidstudio2dgamedevelopment.game.task.LoginTask;
+
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Base64;
 import java.util.concurrent.ExecutorService;
-import java.util.Scanner;
 import java.util.concurrent.Executors;
 
 public class LoginActivity extends AppCompatActivity {
@@ -48,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }else {
                     Toast.makeText(getApplicationContext(),"Hello, "+username ,Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent( LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent( LoginActivity.this, MatchActivity.class);
                     intent.putExtra("username", username);
                     intent.putExtra("password", password);
                     startActivity(intent);

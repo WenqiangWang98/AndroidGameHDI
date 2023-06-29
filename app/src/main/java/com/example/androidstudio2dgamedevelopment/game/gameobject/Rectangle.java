@@ -1,11 +1,8 @@
-package com.example.androidstudio2dgamedevelopment.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.gameobject;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.util.Log;
 
 import com.example.androidstudio2dgamedevelopment.Utils;
 

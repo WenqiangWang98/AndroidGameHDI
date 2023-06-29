@@ -1,22 +1,14 @@
-package com.example.androidstudio2dgamedevelopment.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.gameobject;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
-import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.androidstudio2dgamedevelopment.Country;
 import com.example.androidstudio2dgamedevelopment.R;
-import com.example.androidstudio2dgamedevelopment.graphics.SpriteSheet;
-
-import java.util.Arrays;
 
 public class Card extends Rectangle{
     private final float WIDTH_FLAG=0.8f;

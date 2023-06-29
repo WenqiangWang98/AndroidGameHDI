@@ -1,8 +1,9 @@
-package com.example.androidstudio2dgamedevelopment;
+package com.example.androidstudio2dgamedevelopment.game.task;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import java.util.Base64;
 import java.util.Scanner;
 
 public class LoginTask implements Runnable{
+    String logTag="LoginTask";
 
     Handler creator;
     String username;
@@ -31,7 +33,7 @@ public class LoginTask implements Runnable{
         Bundle msg_data;
         boolean result;
         try {
-            result=login(username,password);
+            result=login();
             msg = creator.obtainMessage();
             msg_data = msg.getData(); // message data
             msg_data.putBoolean("login",result); // (key, value = progress)
@@ -42,8 +44,8 @@ public class LoginTask implements Runnable{
 
     }
 
-    private boolean login(String username, String password) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL("http://20.160.58.77:8080/Server/action/"+username).openConnection();
+    private boolean login() throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL("http://20.160.58.77:8080/Server/action/"+username+"/login").openConnection();
 
 
 
@@ -55,6 +57,7 @@ public class LoginTask implements Runnable{
         connection.setRequestMethod("GET");
 
         int code=connection.getResponseCode();
+        Log.d(logTag, "code: "+code);
         if(code==200){StringBuilder response = new StringBuilder();
             Scanner scanner = new Scanner(connection.getInputStream());
             while (scanner.hasNextLine()) {
@@ -64,7 +67,9 @@ public class LoginTask implements Runnable{
             scanner.close();
             JSONObject jsonObject;
             try{
+                Log.d(logTag, "string: "+response.toString());
                 jsonObject=new JSONObject(response.toString());
+                Log.d(logTag, "name: "+jsonObject.getString("name"));
                 if(jsonObject.getString("name").equals(username)) return true;
             } catch (JSONException e) {
                 e.printStackTrace();

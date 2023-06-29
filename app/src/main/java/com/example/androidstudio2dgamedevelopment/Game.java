@@ -12,13 +12,13 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.androidstudio2dgamedevelopment.gameobject.Deck;
-import com.example.androidstudio2dgamedevelopment.gameobject.Desk;
-import com.example.androidstudio2dgamedevelopment.gameobject.DeskManager;
-import com.example.androidstudio2dgamedevelopment.gameobject.PlayerHand;
-import com.example.androidstudio2dgamedevelopment.gamepanel.EndTurnButton;
-import com.example.androidstudio2dgamedevelopment.gamepanel.Performance;
-import com.example.androidstudio2dgamedevelopment.gamepanel.ScoreBoard;
+import com.example.androidstudio2dgamedevelopment.game.gameobject.Deck;
+import com.example.androidstudio2dgamedevelopment.game.gameobject.Desk;
+import com.example.androidstudio2dgamedevelopment.game.gameobject.DeskManager;
+import com.example.androidstudio2dgamedevelopment.game.gameobject.PlayerHand;
+import com.example.androidstudio2dgamedevelopment.game.gamepanel.EndTurnButton;
+import com.example.androidstudio2dgamedevelopment.game.gamepanel.Performance;
+import com.example.androidstudio2dgamedevelopment.game.gamepanel.ScoreBoard;
 
 /**
  * Game manages all objects in the game and is responsible for updating all states and render all

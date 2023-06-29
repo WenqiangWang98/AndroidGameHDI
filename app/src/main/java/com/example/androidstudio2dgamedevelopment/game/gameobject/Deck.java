@@ -1,12 +1,8 @@
-package com.example.androidstudio2dgamedevelopment.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.gameobject;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import com.example.androidstudio2dgamedevelopment.Country;
-import com.example.androidstudio2dgamedevelopment.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
