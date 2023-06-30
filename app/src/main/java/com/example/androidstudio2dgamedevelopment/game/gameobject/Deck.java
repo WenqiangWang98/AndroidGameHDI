@@ -10,6 +10,9 @@ import java.util.List;
 
 public class Deck {
     private List<Card> cardList = new ArrayList<>();
+    Context context;
+    List<Country> countries;
+    float x,y;
     public Deck(Context context, List<Country> countries, float x,float y){
         //for tests
 //        cardList.add(new Card(context,countries.get(3)));
@@ -33,14 +36,16 @@ public class Deck {
 //        cardList.add(new Card(context,countries.get(178)));
 //        cardList.add(new Card(context,countries.get(187)));
 
-        for(Country country:countries)
-            cardList.add(new Card(context,country,x,y));
-        Collections.shuffle(cardList);
+        this.context=context;
+        this.countries=countries;
+        this.x=x;
+        this.y=y;
     }
 
-    public Card drawCard() {
-        Card aux=cardList.get(0);
-        cardList.remove(aux);
-        return aux;
+    public Card drawCard(int index, boolean opponent) {
+        if(index>0){
+            return new Card(context,countries.get(index-1) ,x,y,opponent);
+        }
+        else return null;
     }
 }

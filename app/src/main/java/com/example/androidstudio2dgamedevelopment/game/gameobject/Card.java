@@ -32,10 +32,11 @@ public class Card extends Rectangle{
     private final Country country;
     private final float TEXT_SIZE_BIG;
     private final float TEXT_SIZE_MEDIUM;
+    private final boolean opponent;
     private Paint textPaint;
 
 
-    public Card(Context context, Country country,float screenWidth,float screenHeight) {
+    public Card(Context context, Country country,float screenWidth,float screenHeight,boolean opponent) {
         super( ContextCompat.getColor(context, R.color.player),200,200,screenHeight*0.1f,screenHeight*0.1618f);
         TEXT_SIZE_BIG=screenHeight*0.030f;
         TEXT_SIZE_MEDIUM=screenHeight*0.023f;
@@ -49,19 +50,27 @@ public class Card extends Rectangle{
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
         textPaint.setTextAlign(Paint.Align.CENTER);
+        this.opponent=opponent;
 
         this.country=country;
     }
-
     @Override
     public void draw(Canvas canvas) {
         //rotate
+
         boolean rotating=false;
         if(rotated&&!clicking){
             rotating=true;
             canvas.save();
             canvas.rotate(theta,rotationX,rotationY);
         }
+        if(opponent){
+            canvas.save();
+            canvas.rotate(180,positionX,positionY);
+        }
+
+
+
         //Draw shadow
         canvas.drawRoundRect(left, top, right, bottom, cornerRadio*zoom,cornerRadio*zoom, shadow);
 
@@ -113,6 +122,7 @@ public class Card extends Rectangle{
 
         //rotate back
         if(rotating)canvas.restore();
+        if(opponent)canvas.restore();
 
     }
 
@@ -131,4 +141,5 @@ public class Card extends Rectangle{
         else zoom=1f;
         super.update();
     }
+    public int getIndex(){return country.getIndex();}
 }

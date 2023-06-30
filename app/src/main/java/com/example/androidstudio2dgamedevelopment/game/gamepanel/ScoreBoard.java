@@ -18,13 +18,13 @@ public class ScoreBoard extends Rectangle {
 
 
     public ScoreBoard(Context context, float x,float y) {
-        super(ContextCompat.getColor(context,R.color.enemy),0.05f*x,y/2f,0.03f*x,0.015f*x);
+        super(ContextCompat.getColor(context,R.color.enemy),0.15f*y,y/2f,0.15f*y,0.06f*y);
         SCORE_TEXT_SIZE=0.02f*x;
         SCORE_TEXT_WIDTH=0.015f*x;
         SCORE_TEXT_HEIGHT=0.007f*x;
     }
 
-    public void draw(Canvas canvas, String player, String opponent) {
+    public void draw(Canvas canvas, int player, int opponent,int round,boolean roundOfPlayer) {
         Paint paint;
 
         // Draw Shadow
@@ -33,16 +33,19 @@ public class ScoreBoard extends Rectangle {
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
         paint =new Paint();
-        paint.setColor(Color.LTGRAY);
+
+        if(roundOfPlayer)paint.setColor(Color.GREEN);
+        else paint.setColor(Color.LTGRAY);
         // Draw background
         canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
         // Draw score
-        paint.setColor(Color.BLUE);
+        paint.setColor(Color.BLACK);
         paint.setTextSize(SCORE_TEXT_SIZE);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(" : " , positionX, positionY+SCORE_TEXT_HEIGHT, paint);
-        canvas.drawText(player, positionX-SCORE_TEXT_WIDTH, positionY+SCORE_TEXT_HEIGHT, paint);
-        canvas.drawText(opponent, positionX+SCORE_TEXT_WIDTH, positionY+SCORE_TEXT_HEIGHT, paint);
+        canvas.drawText("Round: "+round , positionX, positionY-SCORE_TEXT_HEIGHT, paint);
+        canvas.drawText(" : " , positionX, positionY+2*SCORE_TEXT_HEIGHT, paint);
+        canvas.drawText(""+player, positionX-SCORE_TEXT_WIDTH, positionY+2*SCORE_TEXT_HEIGHT, paint);
+        canvas.drawText(""+opponent, positionX+SCORE_TEXT_WIDTH, positionY+2*SCORE_TEXT_HEIGHT, paint);
 
     }
 }

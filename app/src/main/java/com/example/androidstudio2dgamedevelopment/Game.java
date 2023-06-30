@@ -6,6 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,22 +18,32 @@ import android.view.SurfaceView;
 import com.example.androidstudio2dgamedevelopment.game.gameobject.Deck;
 import com.example.androidstudio2dgamedevelopment.game.gameobject.Desk;
 import com.example.androidstudio2dgamedevelopment.game.gameobject.DeskManager;
+import com.example.androidstudio2dgamedevelopment.game.gameobject.OpponentHand;
 import com.example.androidstudio2dgamedevelopment.game.gameobject.PlayerHand;
 import com.example.androidstudio2dgamedevelopment.game.gamepanel.EndTurnButton;
 import com.example.androidstudio2dgamedevelopment.game.gamepanel.Performance;
 import com.example.androidstudio2dgamedevelopment.game.gamepanel.ScoreBoard;
+import com.example.androidstudio2dgamedevelopment.task.getMatchInfoTask;
+import com.example.androidstudio2dgamedevelopment.task.postMatchInfoTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Game manages all objects in the game and is responsible for updating all states and render all
  * objects to the screen
  */
 class Game extends SurfaceView implements SurfaceHolder.Callback {
-
+    private String logTag="Game.java";
     private int CardPointerId = 0;
     private GameLoop gameLoop;
 
     private final Performance performance;
     private final PlayerHand playerHand;
+    private final OpponentHand opponentHand;
     private final Deck deck;
     private final DeskManager deskManager;
     private final ScoreBoard scoreBoard;
@@ -38,10 +51,23 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final int windowSizeX,windowSizeY;
 
+    private final String username,password;
+    Handler handler;
+    ExecutorService es;
+    ExecutorService es2;
 
 
-    public Game(Context context) {
+    private int round=0;
+    private boolean roundOfPlayer;
+    private int playerScore;
+    private int opponentScore;
+    private int deskNumber;
+
+
+    public Game(Context context,String username,String password,int match) {
         super(context);
+        this.username=username;
+        this.password=password;
         // Get surface holder and add callback
         SurfaceHolder surfaceHolder = getHolder();
 
@@ -63,12 +89,63 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Initialize game objects
         deck =new Deck(context,Utils.initializeCSV(context),windowSizeX,windowSizeY);
         playerHand= new PlayerHand(windowSizeX, windowSizeY);
-        for(int i=0;i<10;i++)playerHand.add(deck.drawCard());
-        playerHand.sort();
+        opponentHand= new OpponentHand(windowSizeX, windowSizeY);
         deskManager=new DeskManager();
-        deskManager.add(new Desk(context,windowSizeX/2f, windowSizeY/2f,windowSizeX,windowSizeY));
 
+        es= Executors.newSingleThreadExecutor();
+        es2= Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                String matchInfo = inputMessage.getData().getString("matchInfo");
+                Log.d(logTag, "matchInfo: "+matchInfo);
+                try {
+                    JSONObject jsonObject= new JSONObject(matchInfo);
+                    roundOfPlayer=jsonObject.getBoolean("roundOfPlayer");
+                    int cards;
 
+                    cards=jsonObject.getInt("opponentHandCards");
+                    opponentHand.reset();
+                    for (int i=0;i<cards;i++){
+                        opponentHand.add(deck.drawCard(jsonObject.getInt("opponentHand"+i),true));
+                    }
+                    int aux=jsonObject.getInt("round");
+                    if(aux==round+1) {
+                        round++;
+                        playerHand.reset();
+                        cards=jsonObject.getInt("playerHandCards");
+                        for (int i=0;i<cards;i++){
+                            playerHand.add(deck.drawCard(jsonObject.getInt("playerHand"+i),false));
+                        }
+                        playerScore = jsonObject.getInt("playerScore");
+                        opponentScore = jsonObject.getInt("opponentScore");
+                        deskNumber = jsonObject.getInt("deskNumber");
+                        deskManager.reset();
+                        for (int i=0;i<deskNumber;i++){
+
+                            Desk auxDesk=new Desk(context,jsonObject.getString("deskString"+i),
+                                    windowSizeX/(float)(deskNumber+1)*(i+1),windowSizeY/2f,windowSizeX,windowSizeY);
+                            auxDesk.setOpponentCard(deck.drawCard(jsonObject.getInt("deskOpponent"+i),true));
+                            deskManager.add(auxDesk);
+                        }
+                    }
+                    int cardToAdd=jsonObject.getInt("addCardToHand");
+                    if(cardToAdd!=0){
+                        playerHand.add(deck.drawCard(cardToAdd,false));
+                        postMatchInfo(false);
+                    }
+                    for (int i=0;i<deskNumber;i++){
+                        deskManager.getDesk(i).setOpponentCard(deck.drawCard(jsonObject.getInt("deskOpponent"+i),true));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Log.d(logTag, "Scheduling new task in background thread");
+        getMatchInfoTask task = new getMatchInfoTask(handler,username,password);
+        es.execute(task);
 
 
     }
@@ -81,15 +158,17 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_DOWN:
                 playerHand.checkAnyCardClicking(event.getX(), event.getY());
                 deskManager.checkCardAnyDeskClicking(event.getX(), event.getY());
+                if(roundOfPlayer&&endTurnButton.checkClicking(event.getX(), event.getY()))postMatchInfo(true);
                 return true;
             case MotionEvent.ACTION_MOVE:
                 playerHand.dragCardTo(event.getX(), event.getY());
-                deskManager.dragCardTo(event.getX(), event.getY());
+                if(roundOfPlayer)deskManager.dragCardTo(event.getX(), event.getY());
                 return true;
 
             case MotionEvent.ACTION_UP:
-                playerHand.playCardOnDesk(deskManager);
-                deskManager.returnCardToHand(playerHand);
+                if(roundOfPlayer)playerHand.playCardOnDesk(deskManager);
+                if(roundOfPlayer)deskManager.returnCardToHand(playerHand);
+                postMatchInfo(false);
                 playerHand.sort();
                 return true;
         }
@@ -127,18 +206,19 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 
 
-        // Draw game table UI
 
-        scoreBoard.draw(canvas,"1","2");
-        endTurnButton.draw(canvas);
         // Draw game objects
 
         deskManager.draw(canvas);
         playerHand.draw(canvas);
+        opponentHand.draw(canvas);
 
         // Draw game panels
         performance.draw(canvas);
+        // Draw game table UI
 
+        scoreBoard.draw(canvas,playerScore,opponentScore, round,roundOfPlayer);
+        endTurnButton.draw(canvas,roundOfPlayer);
     }
 
     public void update() {
@@ -148,8 +228,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Update game state
 
         deskManager.update();
-        playerHand.update();
 
+        playerHand.update();
+        opponentHand.update();
         // Iterate through enemyList and Check for collision between each enemy and the player and
         // spells in spellList.
 
@@ -160,5 +241,14 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public void pause() {
         gameLoop.stopLoop();
+    }
+
+    private void postMatchInfo(boolean endRound) {
+        String matchInfo="&endRound="+endRound;
+        matchInfo+=playerHand.getMatchInfo();
+        matchInfo+=deskManager.getMatchInfo();
+        Log.d(logTag, "matchInfoToPost:"+matchInfo);
+        postMatchInfoTask task = new postMatchInfoTask(username,password,matchInfo);
+        es2.execute(task);
     }
 }

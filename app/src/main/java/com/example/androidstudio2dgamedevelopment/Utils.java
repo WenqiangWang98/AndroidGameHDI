@@ -11,12 +11,18 @@ import com.opencsv.CSVReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.Scanner;
 
 public class Utils {
 
@@ -73,10 +79,11 @@ public class Utils {
             String line = "";
             List<Country> countries = new ArrayList<>();
             Resources resources=context.getResources();
+            int i=1;
             while ((line = reader.readLine()) != null) {
                 // nextLine[] is an array of values from the line
                 String[] nextLine=line.split(",");
-                countries.add(new Country(
+                countries.add(new Country(i,
                         Integer.parseInt(nextLine[0]),
                         nextLine[1],Float.parseFloat(nextLine[2]),
                         Float.parseFloat(nextLine[3]),
@@ -84,6 +91,7 @@ public class Utils {
                         Integer.parseInt(nextLine[5]),
                         resources.getDrawable(resources.getIdentifier(nextLine[6],"drawable",context.getPackageName()))
                         ));
+                i++;
             }
             return countries;
         } catch (Exception e) {
@@ -92,5 +100,41 @@ public class Utils {
         }
 
         return null;
+    }
+    public static String RestfulAPI(String username, String password, String postOrGet, String section,String postData) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL("http://20.160.58.77:8080/Server/action/"+username+section).openConnection();
+
+        String authString = username + ":" + password;
+        String encodedAuth = Base64.getEncoder().encodeToString(authString.getBytes());
+        String authHeader = "Basic " + encodedAuth;
+        connection.setRequestProperty("Authorization", authHeader);
+
+
+        postData="command="+section+postData;
+        if(postOrGet.equals("POST")) {
+            connection.setDoOutput(true);
+            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+            wr.write(postData);
+            wr.flush();
+        }
+
+        connection.setRequestMethod(postOrGet);
+
+        int code=connection.getResponseCode();
+
+        if(code==200){
+            if(postOrGet.equals("GET")){
+                StringBuilder response = new StringBuilder();
+                Scanner scanner = new Scanner(connection.getInputStream());
+                while (scanner.hasNextLine()) {
+                    response.append(scanner.nextLine());
+                    response.append("\n");
+                }
+                scanner.close();
+                Log.d("RestfulAPI", "response: "+response.toString());
+                return response.toString();
+            }
+        }
+        return "{}";
     }
 }

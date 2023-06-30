@@ -8,17 +8,14 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androidstudio2dgamedevelopment.game.task.LoginTask;
-import com.example.androidstudio2dgamedevelopment.game.task.MatchTask;
+import com.example.androidstudio2dgamedevelopment.task.MatchTask;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

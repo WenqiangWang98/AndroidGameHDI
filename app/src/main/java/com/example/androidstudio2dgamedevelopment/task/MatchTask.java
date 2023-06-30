@@ -1,4 +1,4 @@
-package com.example.androidstudio2dgamedevelopment.game.task;
+package com.example.androidstudio2dgamedevelopment.task;
 
 import android.os.Bundle;
 import android.os.Handler;

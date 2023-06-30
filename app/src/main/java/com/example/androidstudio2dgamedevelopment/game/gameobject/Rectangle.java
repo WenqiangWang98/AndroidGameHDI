@@ -114,4 +114,8 @@ public class Rectangle extends GameObject {
     public void resetRotation(){
         rotated=false;
     }
+
+    protected float getHeight() {
+        return height;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.androidstudio2dgamedevelopment.game.gameobject;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
 
@@ -7,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerHand extends Hand {
-    private List<Card> cardList = new ArrayList<>();
     private int indexOfCardClicking;
     private boolean hasCardClicking;
 
@@ -27,6 +27,7 @@ public class PlayerHand extends Hand {
         hasCardClicking=false;
     }
 
+
     public boolean getHasCardClicking() {
         return hasCardClicking;
     }
@@ -36,11 +37,7 @@ public class PlayerHand extends Hand {
         return cardList.get(indexOfCardClicking);
     }
 
-    public void draw(Canvas canvas) {
-        for (int i=0;i<cardList.size();i++){
-            cardList.get(i).draw(canvas);
-        }
-    }
+
 
     public void sort() {
         float middle=displayMetricsX/2f;
@@ -59,14 +56,6 @@ public class PlayerHand extends Hand {
 
     }
 
-    public void discard(Card cardPressed) {
-
-        cardList.remove(cardPressed);
-    }
-    public void add(Card c){
-        cardList.add(c);
-    }
-
 
     public void dragCardTo(float x, float y) {
         if(hasCardClicking){
@@ -81,6 +70,15 @@ public class PlayerHand extends Hand {
                 deskManager.getReceiverDesk().exchangeCard(this);
             }
         }
+    }
+
+    public String getMatchInfo() {
+        String postData="&playerCards="+cardList.size();
+        for (int i=0;i<cardList.size();i++){
+            Card d=cardList.get(i);
+            postData+="&playerHand"+i+"="+d.getIndex();
+        }
+        return postData;
     }
 }
 

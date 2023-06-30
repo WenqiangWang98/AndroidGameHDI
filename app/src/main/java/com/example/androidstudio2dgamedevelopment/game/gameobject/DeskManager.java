@@ -15,8 +15,26 @@ public class DeskManager {
         deskList.add(desk);
     }
 
-
-    
+    public String getMatchInfo(){
+        String postData="";
+        for (int i=0;i<deskList.size();i++){
+            Card d=deskList.get(i).getPlayedCard();
+            if( d!=null){
+                postData+="&desk"+i+"="+d.getIndex();
+            }
+            else{
+                postData+="&desk"+i+"="+0;
+            }
+            d=deskList.get(i).getOpponentCard();
+            if( d!=null){
+                postData+="&deskOpponent"+i+"="+d.getIndex();
+            }
+            else{
+                postData+="&deskOpponent"+i+"="+0;
+            }
+        }
+        return postData;
+    }
 
     public void update() {
         for (Desk desk :deskList){
@@ -28,6 +46,14 @@ public class DeskManager {
         for (Desk desk :deskList){
             desk.draw(canvas);
         }
+        for (Desk desk :deskList){
+            if(desk.getPlayedCard()!=null)desk.getPlayedCard().draw(canvas);
+            if(desk.getOpponentCard()!=null)desk.getOpponentCard().draw(canvas);
+        }
+    }
+
+    public Desk getDesk(int i){
+        return deskList.get(i);
     }
 
     public void checkCardAnyDeskClicking(float x, float y) {
@@ -68,5 +94,9 @@ public class DeskManager {
                 deskWithClickingCard=null;
             };
         }
+    }
+
+    public void reset() {
+        deskList = new ArrayList<>();
     }
 }

@@ -24,7 +24,7 @@ public class EndTurnButton extends Rectangle {
 
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas,boolean roundOfPlayer) {
         Paint paint;
 
         // Draw Shadow
@@ -33,7 +33,8 @@ public class EndTurnButton extends Rectangle {
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
         paint =new Paint();
-        paint.setColor(Color.GREEN);
+        if(roundOfPlayer)paint.setColor(Color.GREEN);
+        else paint.setColor(Color.LTGRAY);
         // Draw background
         canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
         // Draw text
