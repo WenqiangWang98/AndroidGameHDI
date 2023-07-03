@@ -24,9 +24,8 @@ public class MainActivity extends Activity {
         Intent intent = getIntent();
         String username=intent.getStringExtra("username");
         String password=intent.getStringExtra("password");
-        int match = intent.getIntExtra("match", -1);
-        Log.d(logTag, "Match = " + match);
-        game=new Game(this,username,password,match);
+        String game_name=intent.getStringExtra("game_name");
+        game=new Game(this,username,password,game_name);
         setContentView(R.layout.activity_main);
         LinearLayout surface = findViewById(R.id.main);
         surface.addView(game);

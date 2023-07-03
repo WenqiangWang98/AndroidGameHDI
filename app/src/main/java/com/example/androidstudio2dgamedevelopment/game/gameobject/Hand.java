@@ -42,6 +42,11 @@ public abstract class Hand {
     public void discard(Card card) {
         cardList.remove(card);
     }
+    public void discard(int index) {
+        cardList.removeIf(card -> card.getIndex() == index);
+        sort();
+    }
+
 
     public void reset(){cardList = new ArrayList<>();}
     public void add(Card c){

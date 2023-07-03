@@ -129,7 +129,7 @@ public class Card extends Rectangle{
     @Override
     public boolean checkClicking(float x, float y) {
         if(super.checkClicking(x, y)){
-            setPosition(x,y);
+            //setPosition(x,y);
             return true;
         }
         return false;

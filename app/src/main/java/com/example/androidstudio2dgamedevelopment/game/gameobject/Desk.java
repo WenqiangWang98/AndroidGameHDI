@@ -12,17 +12,19 @@ import com.example.androidstudio2dgamedevelopment.R;
 
 public class Desk extends Rectangle{
     private final float RADIO_CORNER=50;
-    private String description;
+    private int type;
     private float DESCRIPTION_TEXT_SIZE;
-
+    private final String[] description={"HDI","Longevity","Education","GNI"};
     private  Context context;
     private Card playedCard1;
     private Card playedCard2;
-    public Desk(Context context,String description, float x,float y,float screenWidth, float screenHeight) {
+    private int index;
+    public Desk(Context context,int type, float x,float y,float screenWidth, float screenHeight,int index) {
         super(ContextCompat.getColor(context, R.color.player),x,y,screenHeight*0.15f,screenHeight*0.4f);
-        this.description=description;
-        this.DESCRIPTION_TEXT_SIZE=0.007f*screenHeight;
+        this.type=type;
+        this.DESCRIPTION_TEXT_SIZE=0.03f*screenHeight;
         this.context=context;
+        this.index=index;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class Desk extends Rectangle{
         paint.setColor(Color.BLUE);
         paint.setTextSize(DESCRIPTION_TEXT_SIZE);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(description , positionX, positionY+2*DESCRIPTION_TEXT_SIZE, paint);
+        canvas.drawText(description[type] , positionX, positionY+DESCRIPTION_TEXT_SIZE, paint);
 
     }
 
@@ -78,11 +80,11 @@ public class Desk extends Rectangle{
         playedCard1.setClicking(false);
         if(!hasInside(playedCard1)){
             //outside
-            hand.add(playedCard1);
-            playedCard1=null;
+            //hand.add(playedCard1);
+            //playedCard1=null;
             return true;
         }else{
-            playedCard1.setPosition(positionX,positionY+ playedCard1.getHeight());
+            playedCard1.setPosition(positionX,positionY+ 1.2f*playedCard1.getHeight());
             return false;
         }
     }
@@ -96,5 +98,22 @@ public class Desk extends Rectangle{
 
     public Card getOpponentCard(){
         return playedCard2;
+    }
+
+    public void setCard(Card card1, Card card2) {
+        playedCard2=card2;
+        playedCard1=card1;
+        if(card1!=null){
+
+            playedCard1.setPosition(positionX,positionY+ 1.2f*playedCard1.getHeight());
+        }
+        if(card2!=null){
+
+            playedCard2.setPosition(positionX,positionY- 1.2f*playedCard2.getHeight());
+        }
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

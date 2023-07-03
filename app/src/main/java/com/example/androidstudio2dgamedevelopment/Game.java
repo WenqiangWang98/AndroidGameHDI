@@ -2,6 +2,7 @@ package com.example.androidstudio2dgamedevelopment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import com.example.androidstudio2dgamedevelopment.game.gameobject.Deck;
 import com.example.androidstudio2dgamedevelopment.game.gameobject.Desk;
@@ -51,23 +53,93 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final int windowSizeX,windowSizeY;
 
-    private final String username,password;
-    Handler handler;
-    ExecutorService es;
-    ExecutorService es2;
+    private final String username,password,game_name;
+//    Handler handler;
+//    ExecutorService es;
+//    ExecutorService es2;
 
 
     private int round=0;
-    private boolean roundOfPlayer;
-    private int playerScore;
-    private int opponentScore;
-    private int deskNumber;
+    private boolean turnOfPlayer=false;
+    private int playerScore=0;
+    private int opponentScore=0;
+    private final Context context;
 
+    Handler hand_mqtt_msg = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message inputMsg){
 
-    public Game(Context context,String username,String password,int match) {
+            String topic = inputMsg.getData().getString("topic_name");
+            String payload = inputMsg.getData().getString("payload");
+            System.out.println("received MSG:" +topic+payload);
+            String[] topics=topic.split("/");
+            if(topic.startsWith("STC/"+game_name)){
+                if (topics[2].equals("player1_hand")){
+                    if (topics[1].startsWith(username)){
+                        playerHand.add(deck.drawCard(Integer.parseInt(payload),false));
+                    }else if(topics[1].endsWith(username)){
+                        opponentHand.add(deck.drawCard(Integer.parseInt(payload),true));
+                    }
+                }else if (topics[2].equals("player2_hand")){
+                    if (topics[1].startsWith(username)){
+                        opponentHand.add(deck.drawCard(Integer.parseInt(payload),true));
+                    }else if(topics[1].endsWith(username)){
+                        playerHand.add(deck.drawCard(Integer.parseInt(payload),false));
+                    }
+                }else if(topics[2].equals("desk")){
+
+                    String[] info = payload.split(",");
+                    int deskIndex=Integer.parseInt(info[3]);
+                    int type=Integer.parseInt(info[0]);
+                    deskManager.add(new Desk(context,type,0,0,windowSizeX,windowSizeY,deskIndex));
+                }else if(topics[2].startsWith("remove_card_hand")){
+                    playerHand.discard(Integer.parseInt(payload));
+                    opponentHand.discard(Integer.parseInt(payload));
+                }else if(topics[2].equals("set_desk_card")) {
+                    String[] info = payload.split(",");
+                    if (topics[1].startsWith(username)){
+                        deskManager.getDesk(Integer.parseInt(info[3]))
+                                .setCard(deck.drawCard(Integer.parseInt(info[1]),false)
+                                ,deck.drawCard(Integer.parseInt(info[2]),true));
+                    }else if(topics[1].endsWith(username)){
+                        deskManager.getDesk(Integer.parseInt(info[3])).
+                                setCard(deck.drawCard(Integer.parseInt(info[2]),false)
+                                ,deck.drawCard(Integer.parseInt(info[1]),true));
+                    }
+                }else if(topics[2].equals("round")){
+                    deskManager.reset();
+                    round=Integer.parseInt(payload);
+                }else if(topics[2].equals("turn_of_player")){
+                    if (topics[1].startsWith(username)){
+                        turnOfPlayer=payload.equals("False");
+                    }else if(topics[1].endsWith(username)){
+                        turnOfPlayer=payload.equals("True");
+                    }
+                }else if(topics[2].equals("round_winner")){
+
+                }else if(topics[2].equals("scores")){
+                    if (topics[1].startsWith(username)){
+                        playerScore=Integer.parseInt(payload.split(",")[0]);
+                        opponentScore=Integer.parseInt(payload.split(",")[1]);
+                    }else if(topics[1].endsWith(username)){
+                        playerScore=Integer.parseInt(payload.split(",")[1]);
+                        opponentScore=Integer.parseInt(payload.split(",")[0]);
+                    }
+                }
+            }else  {
+                Log.d("Game.java", "wrong topic: "+topic);
+            }
+        }
+    };
+
+    MQTTModule mqtt_handler = MQTTModule.getInstance();
+
+    public Game(Context context,String username,String password,String game_name) {
         super(context);
+        this.context=context;
         this.username=username;
         this.password=password;
+        this.game_name=game_name;
         // Get surface holder and add callback
         SurfaceHolder surfaceHolder = getHolder();
 
@@ -90,62 +162,62 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         deck =new Deck(context,Utils.initializeCSV(context),windowSizeX,windowSizeY);
         playerHand= new PlayerHand(windowSizeX, windowSizeY);
         opponentHand= new OpponentHand(windowSizeX, windowSizeY);
-        deskManager=new DeskManager();
+        deskManager=new DeskManager(windowSizeX,windowSizeY);
 
-        es= Executors.newSingleThreadExecutor();
-        es2= Executors.newSingleThreadExecutor();
-        handler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                String matchInfo = inputMessage.getData().getString("matchInfo");
-                Log.d(logTag, "matchInfo: "+matchInfo);
-                try {
-                    JSONObject jsonObject= new JSONObject(matchInfo);
-                    roundOfPlayer=jsonObject.getBoolean("roundOfPlayer");
-                    int cards;
 
-                    cards=jsonObject.getInt("opponentHandCards");
-                    opponentHand.reset();
-                    for (int i=0;i<cards;i++){
-                        opponentHand.add(deck.drawCard(jsonObject.getInt("opponentHand"+i),true));
-                    }
-                    int aux=jsonObject.getInt("round");
-                    if(aux==round+1) {
-                        round++;
-                        playerHand.reset();
-                        cards=jsonObject.getInt("playerHandCards");
-                        for (int i=0;i<cards;i++){
-                            playerHand.add(deck.drawCard(jsonObject.getInt("playerHand"+i),false));
-                        }
-                        playerScore = jsonObject.getInt("playerScore");
-                        opponentScore = jsonObject.getInt("opponentScore");
-                        deskNumber = jsonObject.getInt("deskNumber");
-                        deskManager.reset();
-                        for (int i=0;i<deskNumber;i++){
+//        es= Executors.newSingleThreadExecutor();
+//        es2= Executors.newSingleThreadExecutor();
+//        handler = new Handler(Looper.getMainLooper()) {
+//            @Override
+//            public void handleMessage(Message inputMessage) {
+//                String matchInfo = inputMessage.getData().getString("matchInfo");
+//                Log.d(logTag, "matchInfo: "+matchInfo);
+//                try {
+//                    JSONObject jsonObject= new JSONObject(matchInfo);
+//                    turnOfPlayer=jsonObject.getBoolean("turnOfPlayer");
+//                    int cards;
+//
+//                    cards=jsonObject.getInt("opponentHandCards");
+//                    opponentHand.reset();
+//                    for (int i=0;i<cards;i++){
+//                        opponentHand.add(deck.drawCard(jsonObject.getInt("opponentHand"+i),true));
+//                    }
+//                    int aux=jsonObject.getInt("round");
+//                    if(aux==round+1) {
+//                        round++;
+//                        playerHand.reset();
+//                        cards=jsonObject.getInt("playerHandCards");
+//                        for (int i=0;i<cards;i++){
+//                            playerHand.add(deck.drawCard(jsonObject.getInt("playerHand"+i),false));
+//                        }
+//                        playerScore = jsonObject.getInt("playerScore");
+//                        opponentScore = jsonObject.getInt("opponentScore");
+//                        deskNumber = jsonObject.getInt("deskNumber");
+//                        deskManager.reset();
+//                        for (int i=0;i<deskNumber;i++){
+//
+//                            Desk auxDesk=new Desk(context,jsonObject.getString("deskString"+i),
+//                                    windowSizeX/(float)(deskNumber+1)*(i+1),windowSizeY/2f,windowSizeX,windowSizeY);
+//                            deskManager.add(auxDesk);
+//                        }
+//                    }
+//                    int cardToAdd=jsonObject.getInt("addCardToHand");
+//                    if(cardToAdd!=0){
+//                        playerHand.add(deck.drawCard(cardToAdd,false));
+//                        postMatchInfo(false);
+//                    }
+//                    for (int i=0;i<deskNumber;i++){
+//                        deskManager.getDesk(i).setOpponentCard(deck.drawCard(jsonObject.getInt("deskOpponent"+i),true));
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
 
-                            Desk auxDesk=new Desk(context,jsonObject.getString("deskString"+i),
-                                    windowSizeX/(float)(deskNumber+1)*(i+1),windowSizeY/2f,windowSizeX,windowSizeY);
-                            auxDesk.setOpponentCard(deck.drawCard(jsonObject.getInt("deskOpponent"+i),true));
-                            deskManager.add(auxDesk);
-                        }
-                    }
-                    int cardToAdd=jsonObject.getInt("addCardToHand");
-                    if(cardToAdd!=0){
-                        playerHand.add(deck.drawCard(cardToAdd,false));
-                        postMatchInfo(false);
-                    }
-                    for (int i=0;i<deskNumber;i++){
-                        deskManager.getDesk(i).setOpponentCard(deck.drawCard(jsonObject.getInt("deskOpponent"+i),true));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Log.d(logTag, "Scheduling new task in background thread");
-        getMatchInfoTask task = new getMatchInfoTask(handler,username,password);
-        es.execute(task);
+//        Log.d(logTag, "Scheduling new task in background thread");
+//        getMatchInfoTask task = new getMatchInfoTask(handler,username,password);
+//        es.execute(task);
 
 
     }
@@ -158,17 +230,21 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_DOWN:
                 playerHand.checkAnyCardClicking(event.getX(), event.getY());
                 deskManager.checkCardAnyDeskClicking(event.getX(), event.getY());
-                if(roundOfPlayer&&endTurnButton.checkClicking(event.getX(), event.getY()))postMatchInfo(true);
+                if(turnOfPlayer&&endTurnButton.checkClicking(event.getX(), event.getY())){
+                    mqtt_handler.sendMSGToTopic("CTS/"+username+"/end_turn","end_turn",2);
+                }
                 return true;
             case MotionEvent.ACTION_MOVE:
                 playerHand.dragCardTo(event.getX(), event.getY());
-                if(roundOfPlayer)deskManager.dragCardTo(event.getX(), event.getY());
+                if(turnOfPlayer)deskManager.dragCardTo(event.getX(), event.getY());
                 return true;
 
             case MotionEvent.ACTION_UP:
-                if(roundOfPlayer)playerHand.playCardOnDesk(deskManager);
-                if(roundOfPlayer)deskManager.returnCardToHand(playerHand);
-                postMatchInfo(false);
+                if(turnOfPlayer){
+                    playerHand.playCardOnDesk(deskManager,mqtt_handler,username);
+                    deskManager.returnCardToHand(playerHand,mqtt_handler,username);
+                }
+//                postMatchInfo(false);
                 playerHand.sort();
                 return true;
         }
@@ -185,6 +261,11 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
             gameLoop = new GameLoop(this, surfaceHolder);
         }
         gameLoop.startLoop();
+        mqtt_handler.setHandler(hand_mqtt_msg);
+        if(mqtt_handler.connectToBroker("tcp://52.148.250.153:1883")){
+            mqtt_handler.subscribeToTopic("STC/"+game_name+"/#");
+        }
+        mqtt_handler.sendMSGToTopic("CTS/"+username+"/ready","ready",2);
     }
 
     @Override
@@ -217,8 +298,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         performance.draw(canvas);
         // Draw game table UI
 
-        scoreBoard.draw(canvas,playerScore,opponentScore, round,roundOfPlayer);
-        endTurnButton.draw(canvas,roundOfPlayer);
+        scoreBoard.draw(canvas,playerScore,opponentScore, round,turnOfPlayer);
+        endTurnButton.draw(canvas,turnOfPlayer);
     }
 
     public void update() {
@@ -243,12 +324,12 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop.stopLoop();
     }
 
-    private void postMatchInfo(boolean endRound) {
-        String matchInfo="&endRound="+endRound;
-        matchInfo+=playerHand.getMatchInfo();
-        matchInfo+=deskManager.getMatchInfo();
-        Log.d(logTag, "matchInfoToPost:"+matchInfo);
-        postMatchInfoTask task = new postMatchInfoTask(username,password,matchInfo);
-        es2.execute(task);
-    }
+//    private void postMatchInfo(boolean endRound) {
+//        String matchInfo="&endRound="+endRound;
+//        matchInfo+=playerHand.getMatchInfo();
+//        matchInfo+=deskManager.getMatchInfo();
+//        Log.d(logTag, "matchInfoToPost:"+matchInfo);
+//        postMatchInfoTask task = new postMatchInfoTask(username,password,matchInfo);
+//        es2.execute(task);
+//    }
 }

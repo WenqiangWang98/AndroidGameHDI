@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.example.androidstudio2dgamedevelopment.MQTTModule;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +65,14 @@ public class PlayerHand extends Hand {
         }
     }
 
-    public void playCardOnDesk(DeskManager deskManager) {
+    public void playCardOnDesk(DeskManager deskManager, MQTTModule mqtt_handler, String username) {
         if(hasCardClicking) {
             getClickingCard().setClicking(false);
             if(deskManager.hasInside(getClickingCard())){
-                deskManager.getReceiverDesk().exchangeCard(this);
+                //deskManager.getReceiverDesk().exchangeCard(this);
+                mqtt_handler.sendMSGToTopic("CTS/"+username+"/set_card_desk",
+                        deskManager.getReceiverDesk().getIndex()+","+getClickingCard().getIndex(),2);
+                //sort();
             }
         }
     }
