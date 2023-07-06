@@ -1,8 +1,10 @@
-package com.example.androidstudio2dgamedevelopment;
+package com.example.androidstudio2dgamedevelopment.game;
 
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
+import com.example.androidstudio2dgamedevelopment.game.Game;
 
 public class GameLoop extends Thread{
     public static final double MAX_UPS = 60.0;

@@ -1,4 +1,4 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.object;
 
 import android.graphics.Canvas;
 
@@ -9,7 +9,6 @@ public abstract class GameObject {
     protected float positionX, positionY = 0f;
     protected boolean clicking;
 
-    public GameObject() { }
 
     public GameObject(float positionX, float positionY) {
         this.positionX = positionX;
@@ -22,21 +21,10 @@ public abstract class GameObject {
     public abstract void draw(Canvas canvas);
     public abstract void update();
 
-
-    public static double getDistanceBetweenObjects(GameObject obj1, GameObject obj2) {
-        return Math.sqrt(
-            Math.pow(obj2.getPositionX() - obj1.getPositionX(), 2) +
-            Math.pow(obj2.getPositionY() - obj1.getPositionY(), 2)
-        );
-    }
-
     public void setClicking(boolean b) {
         this.clicking=b;
     }
 
-    public boolean getClicking() {
-        return clicking;
-    }
 
 
 }

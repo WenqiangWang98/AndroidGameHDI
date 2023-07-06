@@ -1,8 +1,7 @@
-package com.example.androidstudio2dgamedevelopment;
+package com.example.androidstudio2dgamedevelopment.game;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -15,30 +14,23 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
-import com.example.androidstudio2dgamedevelopment.game.gameobject.Deck;
-import com.example.androidstudio2dgamedevelopment.game.gameobject.Desk;
-import com.example.androidstudio2dgamedevelopment.game.gameobject.DeskManager;
-import com.example.androidstudio2dgamedevelopment.game.gameobject.OpponentHand;
-import com.example.androidstudio2dgamedevelopment.game.gameobject.PlayerHand;
-import com.example.androidstudio2dgamedevelopment.game.gamepanel.EndTurnButton;
-import com.example.androidstudio2dgamedevelopment.game.gamepanel.Performance;
-import com.example.androidstudio2dgamedevelopment.game.gamepanel.ScoreBoard;
-import com.example.androidstudio2dgamedevelopment.task.getMatchInfoTask;
-import com.example.androidstudio2dgamedevelopment.task.postMatchInfoTask;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.example.androidstudio2dgamedevelopment.MQTTModule;
+import com.example.androidstudio2dgamedevelopment.Utils;
+import com.example.androidstudio2dgamedevelopment.game.manager.Deck;
+import com.example.androidstudio2dgamedevelopment.game.object.Desk;
+import com.example.androidstudio2dgamedevelopment.game.manager.DeskManager;
+import com.example.androidstudio2dgamedevelopment.game.manager.OpponentHand;
+import com.example.androidstudio2dgamedevelopment.game.manager.PlayerHand;
+import com.example.androidstudio2dgamedevelopment.game.UI.EndTurnButton;
+import com.example.androidstudio2dgamedevelopment.game.UI.Performance;
+import com.example.androidstudio2dgamedevelopment.game.UI.ScoreBoard;
 
 /**
  * Game manages all objects in the game and is responsible for updating all states and render all
  * objects to the screen
  */
-class Game extends SurfaceView implements SurfaceHolder.Callback {
+public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private String logTag="Game.java";
     private int CardPointerId = 0;
     private GameLoop gameLoop;
@@ -159,7 +151,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         scoreBoard=new ScoreBoard(context,windowSizeX, windowSizeY);
         endTurnButton= new EndTurnButton(context,windowSizeX, windowSizeY);
         // Initialize game objects
-        deck =new Deck(context,Utils.initializeCSV(context),windowSizeX,windowSizeY);
+        deck =new Deck(context, Utils.initializeCSV(context),windowSizeX,windowSizeY);
         playerHand= new PlayerHand(windowSizeX, windowSizeY);
         opponentHand= new OpponentHand(windowSizeX, windowSizeY);
         deskManager=new DeskManager(windowSizeX,windowSizeY);

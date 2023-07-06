@@ -1,4 +1,4 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.object;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,7 +10,7 @@ import com.example.androidstudio2dgamedevelopment.Utils;
  * Circle is an abstract class which implements a draw method from GameObject for drawing the object
  * as a circle.
  */
-public class Rectangle extends GameObject {
+public abstract class Rectangle extends GameObject {
     protected float height;
     protected float width;
     protected Paint paint;

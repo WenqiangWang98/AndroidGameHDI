@@ -1,4 +1,4 @@
-package com.example.androidstudio2dgamedevelopment;
+package com.example.androidstudio2dgamedevelopment.game;
 
 import android.graphics.drawable.Drawable;
 

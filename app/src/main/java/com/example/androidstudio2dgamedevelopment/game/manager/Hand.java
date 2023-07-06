@@ -1,20 +1,12 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.manager;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.service.autofill.AutofillService;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.androidstudio2dgamedevelopment.game.object.Card;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.Scanner;
 
 public abstract class Hand {
     protected List<Card> cardList = new ArrayList<>();
@@ -48,7 +40,6 @@ public abstract class Hand {
     }
 
 
-    public void reset(){cardList = new ArrayList<>();}
     public void add(Card c){
         if(c!=null) {
             cardList.add(c);

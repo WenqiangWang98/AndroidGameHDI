@@ -1,11 +1,6 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.manager;
 
-import android.content.Context;
-import android.graphics.Canvas;
 import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OpponentHand extends Hand {
     public OpponentHand( int x , int y){

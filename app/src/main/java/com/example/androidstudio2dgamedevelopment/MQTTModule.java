@@ -159,8 +159,4 @@ public class MQTTModule {
         }
         return false;
     }
-
-    public boolean isConnected() {
-        return  isConnected;
-    }
 }

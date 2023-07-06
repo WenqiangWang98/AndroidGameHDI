@@ -1,4 +1,4 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.object;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,7 +7,7 @@ import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
 
-import com.example.androidstudio2dgamedevelopment.Country;
+import com.example.androidstudio2dgamedevelopment.game.Country;
 import com.example.androidstudio2dgamedevelopment.R;
 
 public class Card extends Rectangle{
@@ -126,14 +126,7 @@ public class Card extends Rectangle{
 
     }
 
-    @Override
-    public boolean checkClicking(float x, float y) {
-        if(super.checkClicking(x, y)){
-            //setPosition(x,y);
-            return true;
-        }
-        return false;
-    }
+
 
     @Override
     public void update() {

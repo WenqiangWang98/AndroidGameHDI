@@ -1,4 +1,4 @@
-package com.example.androidstudio2dgamedevelopment.game.gamepanel;
+package com.example.androidstudio2dgamedevelopment.game.UI;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,7 +6,7 @@ import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
 
-import com.example.androidstudio2dgamedevelopment.GameLoop;
+import com.example.androidstudio2dgamedevelopment.game.GameLoop;
 import com.example.androidstudio2dgamedevelopment.R;
 
 public class Performance {

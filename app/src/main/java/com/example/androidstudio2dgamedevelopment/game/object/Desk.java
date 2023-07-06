@@ -1,4 +1,4 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.object;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import androidx.core.content.ContextCompat;
 
 import com.example.androidstudio2dgamedevelopment.R;
+import com.example.androidstudio2dgamedevelopment.game.manager.PlayerHand;
 
 
 public class Desk extends Rectangle{
@@ -64,17 +65,6 @@ public class Desk extends Rectangle{
         return false;
     }
 
-    public void exchangeCard(PlayerHand hand) {
-        Card aux;
-        if(playedCard1!=null){
-            aux=playedCard1;
-            hand.add(aux);
-        }
-        playedCard1=hand.getClickingCard();
-        hand.discard(playedCard1);
-        playedCard1.setPosition(positionX,positionY+ playedCard1.getHeight());
-        playedCard1.resetRotation();
-    }
 
     public boolean returnCardToHand(PlayerHand hand) {
         playedCard1.setClicking(false);
@@ -89,12 +79,6 @@ public class Desk extends Rectangle{
         }
     }
 
-    public void setOpponentCard(Card card){
-        playedCard2 = card;
-        if(card!=null) {
-            playedCard2.setPosition(positionX, positionY - playedCard2.getHeight());
-        }
-    }
 
     public Card getOpponentCard(){
         return playedCard2;

@@ -3,21 +3,17 @@ package com.example.androidstudio2dgamedevelopment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PointF;
-import android.os.Environment;
 import android.util.Log;
 
-import com.opencsv.CSVReader;
+import com.example.androidstudio2dgamedevelopment.game.Country;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -101,40 +97,5 @@ public class Utils {
 
         return null;
     }
-    public static String RestfulAPI(String username, String password, String postOrGet, String section,String postData) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL("http://20.160.58.77:8080/Server/action/"+username+section).openConnection();
 
-        String authString = username + ":" + password;
-        String encodedAuth = Base64.getEncoder().encodeToString(authString.getBytes());
-        String authHeader = "Basic " + encodedAuth;
-        connection.setRequestProperty("Authorization", authHeader);
-
-
-        postData="command="+section+postData;
-        if(postOrGet.equals("POST")) {
-            connection.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-            wr.write(postData);
-            wr.flush();
-        }
-
-        connection.setRequestMethod(postOrGet);
-
-        int code=connection.getResponseCode();
-
-        if(code==200){
-            if(postOrGet.equals("GET")){
-                StringBuilder response = new StringBuilder();
-                Scanner scanner = new Scanner(connection.getInputStream());
-                while (scanner.hasNextLine()) {
-                    response.append(scanner.nextLine());
-                    response.append("\n");
-                }
-                scanner.close();
-                Log.d("RestfulAPI", "response: "+response.toString());
-                return response.toString();
-            }
-        }
-        return "{}";
-    }
 }

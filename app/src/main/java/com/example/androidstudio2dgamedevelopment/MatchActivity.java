@@ -30,6 +30,14 @@ public class MatchActivity extends AppCompatActivity {
     ExecutorService es;
     Button buttonAsync;
     ProgressBar progressBar;
+    Handler handler= new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message inputMessage) {
+            int i = inputMessage.getData().getInt("progress", -1);
+            Log.d(logTag, "Message Received with progress = " + i);
+            progressBar.setProgress(i);
+        }
+    };;
 
     Handler hand_mqtt_msg = new Handler(Looper.getMainLooper()){
         @Override
@@ -86,8 +94,9 @@ public class MatchActivity extends AppCompatActivity {
                     mqtt_handler.subscribeToTopic("STC/"+username+"/#");
                 }
                 mqtt_handler.sendMSGToTopic("CTS/"+username+"/matching","matching",2);
-                //MatchTask task = new MatchTask(handler,username,password);
-                //es.execute(task);
+
+                MatchTask task = new MatchTask(handler);
+                es.execute(task);
             }
         });
 

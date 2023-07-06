@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androidstudio2dgamedevelopment.task.LoginTask;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;

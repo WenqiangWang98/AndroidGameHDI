@@ -1,8 +1,10 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.manager;
 
 import android.graphics.Canvas;
 
 import com.example.androidstudio2dgamedevelopment.MQTTModule;
+import com.example.androidstudio2dgamedevelopment.game.object.Desk;
+import com.example.androidstudio2dgamedevelopment.game.object.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,29 +29,6 @@ public class DeskManager {
         }
     }
 
-
-//
-//    public String getMatchInfo(){
-//        String postData="";
-//        for (int i=0;i<deskList.size();i++){
-//            Card d=deskList.get(i).getPlayedCard();
-//            if( d!=null){
-//                postData+="&desk"+i+"="+d.getIndex();
-//            }
-//            else{
-//                postData+="&desk"+i+"="+0;
-//            }
-//            d=deskList.get(i).getOpponentCard();
-//            if( d!=null){
-//                postData+="&deskOpponent"+i+"="+d.getIndex();
-//            }
-//            else{
-//                postData+="&deskOpponent"+i+"="+0;
-//            }
-//        }
-//        return postData;
-//    }
-
     public void update() {
         for (Desk desk :deskList){
             desk.update();
@@ -57,10 +36,8 @@ public class DeskManager {
     }
 
     public void draw(Canvas canvas) {
-        if(deskList.size()>0){
-            for (Desk desk :deskList){
-                desk.draw(canvas);
-            }
+        for(int i=0;i<deskList.size();i++){
+            deskList.get(i).draw(canvas);
         }
         for (Desk desk :deskList){
             if(desk.getPlayedCard()!=null)desk.getPlayedCard().draw(canvas);

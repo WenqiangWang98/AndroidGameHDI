@@ -1,12 +1,12 @@
 package com.example.androidstudio2dgamedevelopment;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.SurfaceView;
 import android.widget.LinearLayout;
+
+import com.example.androidstudio2dgamedevelopment.game.Game;
 
 /**
  * MainActivity is the entry point to our application.

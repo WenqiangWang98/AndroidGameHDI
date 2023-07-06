@@ -1,13 +1,9 @@
-package com.example.androidstudio2dgamedevelopment.game.gameobject;
+package com.example.androidstudio2dgamedevelopment.game.manager;
 
-import android.content.Context;
-import android.graphics.Canvas;
 import android.util.Log;
 
 import com.example.androidstudio2dgamedevelopment.MQTTModule;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.androidstudio2dgamedevelopment.game.object.Card;
 
 public class PlayerHand extends Hand {
     private int indexOfCardClicking;
@@ -28,12 +24,6 @@ public class PlayerHand extends Hand {
         }
         hasCardClicking=false;
     }
-
-
-    public boolean getHasCardClicking() {
-        return hasCardClicking;
-    }
-
 
     public Card getClickingCard() {
         return cardList.get(indexOfCardClicking);
@@ -77,13 +67,6 @@ public class PlayerHand extends Hand {
         }
     }
 
-    public String getMatchInfo() {
-        String postData="&playerCards="+cardList.size();
-        for (int i=0;i<cardList.size();i++){
-            Card d=cardList.get(i);
-            postData+="&playerHand"+i+"="+d.getIndex();
-        }
-        return postData;
-    }
+
 }
 
