@@ -11,20 +11,21 @@ import com.example.androidstudio2dgamedevelopment.R;
 import com.example.androidstudio2dgamedevelopment.game.object.Rectangle;
 
 public class EndTurnButton extends Rectangle {
-    private float RADIO_CORNER=30;
+    private float RADIO_CORNER;
     private float SCORE_TEXT_SIZE;
     private float SCORE_TEXT_WIDTH;
     private float SCORE_TEXT_HEIGHT;
 
     public EndTurnButton(Context context, float x, float y) {
         super(ContextCompat.getColor(context, R.color.enemy),0.90f*x,y/2f,0.05f*x,0.02f*x);
+        RADIO_CORNER=0.02f*x;
         SCORE_TEXT_SIZE=0.02f*x;
         SCORE_TEXT_WIDTH=0.015f*x;
         SCORE_TEXT_HEIGHT=0.007f*x;
 
     }
 
-    public void draw(Canvas canvas,boolean roundOfPlayer) {
+    public void draw(Canvas canvas,boolean roundOfPlayer,boolean turn) {
         Paint paint;
 
         // Draw Shadow
@@ -41,6 +42,6 @@ public class EndTurnButton extends Rectangle {
         paint.setColor(Color.DKGRAY);
         paint.setTextSize(SCORE_TEXT_SIZE);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("End turn" , positionX, positionY+SCORE_TEXT_HEIGHT, paint);
+        canvas.drawText(turn?"End Round":"End Turn", positionX, positionY+SCORE_TEXT_HEIGHT, paint);
     }
 }

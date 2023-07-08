@@ -20,9 +20,9 @@ public abstract class Hand {
         this.displayMetricsY=y;
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, boolean turnOfPlayer) {
         for (int i=0;i<cardList.size();i++){
-            cardList.get(i).draw(canvas);
+            cardList.get(i).draw(canvas,turnOfPlayer);
         };
     }
 

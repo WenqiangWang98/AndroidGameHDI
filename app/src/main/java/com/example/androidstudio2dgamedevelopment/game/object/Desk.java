@@ -12,7 +12,8 @@ import com.example.androidstudio2dgamedevelopment.game.manager.PlayerHand;
 
 
 public class Desk extends Rectangle{
-    private final float RADIO_CORNER=50;
+    private static final float STROKE_WIDTH = 0.03f;
+    private final float RADIO_CORNER;
     private int type;
     private float DESCRIPTION_TEXT_SIZE;
     private final String[] description={"HDI","Longevity","Education","GNI"};
@@ -23,7 +24,8 @@ public class Desk extends Rectangle{
     public Desk(Context context,int type, float x,float y,float screenWidth, float screenHeight,int index) {
         super(ContextCompat.getColor(context, R.color.player),x,y,screenHeight*0.15f,screenHeight*0.4f);
         this.type=type;
-        this.DESCRIPTION_TEXT_SIZE=0.03f*screenHeight;
+        this.RADIO_CORNER=screenHeight*0.05f;
+        this.DESCRIPTION_TEXT_SIZE=0.035f*screenHeight;
         this.context=context;
         this.index=index;
     }
@@ -34,18 +36,28 @@ public class Desk extends Rectangle{
 
         // Draw Shadow
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setARGB(255,255,255,255);
         paint.setShadowLayer(20, 0, 0, Color.GRAY);
-        paint.setStyle(Paint.Style.FILL);
+
+        paint.setStrokeWidth(STROKE_WIDTH*width);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setAlpha(255);
         canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
-        paint =new Paint();
-        paint.setColor(Color.LTGRAY);
-        // Draw background
         canvas.drawRoundRect(left, top, right, bottom, RADIO_CORNER,RADIO_CORNER, paint);
 
-        paint.setColor(Color.BLUE);
+        paint =new Paint();
+        paint.setARGB(255,255,255,255);
+        // Draw background
+        paint.setStyle(Paint.Style.STROKE);
+
+        paint.setStrokeWidth(STROKE_WIDTH*width);
+        canvas.drawRoundRect(left, positionY+DESCRIPTION_TEXT_SIZE, right, positionY-DESCRIPTION_TEXT_SIZE, 0,0, paint);
+
+        paint =new Paint();
+        paint.setColor(Color.WHITE);
         paint.setTextSize(DESCRIPTION_TEXT_SIZE);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(description[type] , positionX, positionY+DESCRIPTION_TEXT_SIZE, paint);
+        canvas.drawText(description[type] , positionX, positionY+0.5f*DESCRIPTION_TEXT_SIZE, paint);
 
     }
 
@@ -74,7 +86,7 @@ public class Desk extends Rectangle{
             //playedCard1=null;
             return true;
         }else{
-            playedCard1.setPosition(positionX,positionY+ 1.2f*playedCard1.getHeight());
+            playedCard1.setPosition(positionX,positionY+ 1.3f*playedCard1.getHeight());
             return false;
         }
     }
@@ -89,11 +101,11 @@ public class Desk extends Rectangle{
         playedCard1=card1;
         if(card1!=null){
 
-            playedCard1.setPosition(positionX,positionY+ 1.2f*playedCard1.getHeight());
+            playedCard1.setPosition(positionX,positionY+ 1.3f*playedCard1.getHeight());
         }
         if(card2!=null){
 
-            playedCard2.setPosition(positionX,positionY- 1.2f*playedCard2.getHeight());
+            playedCard2.setPosition(positionX,positionY- 1.3f*playedCard2.getHeight());
         }
     }
 

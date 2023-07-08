@@ -35,13 +35,13 @@ public class DeskManager {
         }
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas,boolean turnOfPlayer) {
         for(int i=0;i<deskList.size();i++){
             deskList.get(i).draw(canvas);
         }
         for (Desk desk :deskList){
-            if(desk.getPlayedCard()!=null)desk.getPlayedCard().draw(canvas);
-            if(desk.getOpponentCard()!=null)desk.getOpponentCard().draw(canvas);
+            if(desk.getPlayedCard()!=null)desk.getPlayedCard().draw(canvas,turnOfPlayer);
+            if(desk.getOpponentCard()!=null)desk.getOpponentCard().draw(canvas,false);
         }
     }
 

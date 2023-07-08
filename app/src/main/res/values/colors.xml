@@ -13,4 +13,5 @@
     <color name="gameOver">#FC5245</color>
     <color name="margin">#FFEB3B</color>
     <color name="desk">#4CAF50</color>
+    <color name="cardBorderLight">#8000FF00</color>
 </resources>

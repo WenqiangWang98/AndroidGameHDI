@@ -53,6 +53,7 @@ public class MatchActivity extends AppCompatActivity {
             if(topic.equals("STC/"+username+"/game_name")){
                 Toast.makeText(getApplicationContext(),"Match:  "+payload ,Toast.LENGTH_SHORT).show();
                 mqtt_handler.disconnectToBroker();
+                es.shutdown();
                 Intent intent = new Intent( MatchActivity.this, MainActivity.class);
                 intent.putExtra("username", username);
                 intent.putExtra("password", password);

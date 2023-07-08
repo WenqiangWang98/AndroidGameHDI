@@ -17,6 +17,8 @@ import android.view.SurfaceView;
 
 import com.example.androidstudio2dgamedevelopment.MQTTModule;
 import com.example.androidstudio2dgamedevelopment.Utils;
+import com.example.androidstudio2dgamedevelopment.game.UI.EndGameLog;
+import com.example.androidstudio2dgamedevelopment.game.UI.EndRoundLog;
 import com.example.androidstudio2dgamedevelopment.game.manager.Deck;
 import com.example.androidstudio2dgamedevelopment.game.object.Desk;
 import com.example.androidstudio2dgamedevelopment.game.manager.DeskManager;
@@ -42,6 +44,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final DeskManager deskManager;
     private final ScoreBoard scoreBoard;
     private final EndTurnButton endTurnButton;
+    private final EndRoundLog endRoundLog;
+    private final EndGameLog endGameLog;
 
     private final int windowSizeX,windowSizeY;
 
@@ -52,6 +56,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 
     private int round=0;
+    private boolean turn=true;
+    private String winnerOfRound;
+    private String winnerOfGame;
     private boolean turnOfPlayer=false;
     private int playerScore=0;
     private int opponentScore=0;
@@ -98,17 +105,22 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                                 setCard(deck.drawCard(Integer.parseInt(info[2]),false)
                                 ,deck.drawCard(Integer.parseInt(info[1]),true));
                     }
-                }else if(topics[2].equals("round")){
+                }else if(topics[2].equals("round")) {
                     deskManager.reset();
-                    round=Integer.parseInt(payload);
+                    round = Integer.parseInt(payload);
+                    if(round>1)endRoundLog.setClicking(false);
                 }else if(topics[2].equals("turn_of_player")){
                     if (topics[1].startsWith(username)){
                         turnOfPlayer=payload.equals("False");
                     }else if(topics[1].endsWith(username)){
                         turnOfPlayer=payload.equals("True");
                     }
+                    turn=!turn;
                 }else if(topics[2].equals("round_winner")){
-
+                    winnerOfRound=payload;
+                }else if(topics[2].equals("game_winner")){
+                    winnerOfGame=payload;
+                    endGameLog.setClicking(false);
                 }else if(topics[2].equals("scores")){
                     if (topics[1].startsWith(username)){
                         playerScore=Integer.parseInt(payload.split(",")[0]);
@@ -155,7 +167,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         playerHand= new PlayerHand(windowSizeX, windowSizeY);
         opponentHand= new OpponentHand(windowSizeX, windowSizeY);
         deskManager=new DeskManager(windowSizeX,windowSizeY);
-
+        endRoundLog=new EndRoundLog(context,windowSizeX, windowSizeY);
+        endGameLog=new EndGameLog(context,windowSizeX, windowSizeY);
 
 //        es= Executors.newSingleThreadExecutor();
 //        es2= Executors.newSingleThreadExecutor();
@@ -220,6 +233,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Handle user input touch event actions
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+
+                if(endGameLog.endGame())((Activity)context).finish();
+                endRoundLog.anyClick();
                 playerHand.checkAnyCardClicking(event.getX(), event.getY());
                 deskManager.checkCardAnyDeskClicking(event.getX(), event.getY());
                 if(turnOfPlayer&&endTurnButton.checkClicking(event.getX(), event.getY())){
@@ -282,16 +298,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         // Draw game objects
 
-        deskManager.draw(canvas);
-        playerHand.draw(canvas);
-        opponentHand.draw(canvas);
+        deskManager.draw(canvas,turnOfPlayer);
+        playerHand.draw(canvas,turnOfPlayer);
+        opponentHand.draw(canvas, false);
 
         // Draw game panels
-        performance.draw(canvas);
+        //performance.draw(canvas);
         // Draw game table UI
 
-        scoreBoard.draw(canvas,playerScore,opponentScore, round,turnOfPlayer);
-        endTurnButton.draw(canvas,turnOfPlayer);
+        scoreBoard.draw(canvas,playerScore,opponentScore, round,turnOfPlayer,username,game_name.replace(username,"").replace(":",""));
+        endTurnButton.draw(canvas,turnOfPlayer,turn);
+        endRoundLog.draw(canvas,round,winnerOfRound);
+        endGameLog.draw(canvas,winnerOfGame);
     }
 
     public void update() {
